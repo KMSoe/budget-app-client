@@ -1,0 +1,118 @@
+<template>
+  <header class="">
+    <div class="container-fluid">
+      <nav class="main-nav d-flex" :class="[isPlus ? 'bg-plus' : 'bg-minus']">
+        <div class="ms-2">
+          <a  v-if="authenticated"
+            href="#"
+            role="button"
+            class="d-lg-none js-menu-toggle"
+            data-toggle="collapse"
+            data-target="#main-navbar"
+          >
+            <span><i class="fas fa-bars"></i></span>
+          </a>
+
+          <router-link to="/" class="navbar-brand ms-2 text-secondary">
+            <b>Budget</b>
+          </router-link>
+        </div>
+
+        <ul class="nav py-1" v-if="authenticated">
+          <li class="nav-item dropdown">
+            <a
+              id="navbarDropdown"
+              class="nav-link dropdown-toggle"
+              href="#"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              <img
+                src="/src/assets/kms.jpg"
+                alt="Hlaine Hlaine"
+                class="img-fluid"
+              />
+              <span
+                class="username text-white px-2 py-2 d-none d-lg-inline-block"
+                >Hlaine Hlaine</span
+              >
+            </a>
+
+            <div
+              class="dropdown-menu dropdown-menu-right bg-main"
+              aria-labelledby="navbarDropdown"
+            >
+              <router-link class="dropdown-item text-white hover" to="/profile">
+                Profile
+              </router-link>
+              <a class="dropdown-item text-white hover" href="#" role="button">
+                Sign out
+              </a>
+            </div>
+          </li>
+        </ul>
+        <ul class="nav" v-else>
+          <li class="nav-item dropdown">
+              <router-link :to="{name: 'signin'}" class="nav-link" active-class="active">Signin</router-link>
+          </li>
+          <li class="nav-item dropdown">
+              <router-link :to="{name: 'register'}" class="nav-link" active-class="active">Register</router-link>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+</template>
+<script>
+import { mapGetters } from "vuex"
+
+export default {
+  props: ["isPlus"],
+  computed: {
+    ...mapGetters(["authenticated"]),
+  },
+};
+</script>
+
+<style>
+header {
+  border-bottom: 1px solid #3f3f3f;
+}
+.main-nav {
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  transition: background-color 0.4s ease-in-out;
+}
+.main-nav img {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+}
+.hidden {
+  opacity: 0;
+  transition: transform 0.4s, opacity 0.2s;
+}
+.visible {
+  opacity: 1;
+  transition: transform 0.4s, opacity 0.2s;
+}
+.navbar-hide {
+  pointer-events: none;
+  opacity: 0;
+}
+.main-nav ul li .badge {
+  top: -10px;
+}
+@media screen and (max-width: 992px) {
+  .main-nav {
+    height: 60px;
+  }
+}
+</style>

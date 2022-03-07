@@ -1,24 +1,87 @@
 <template>
-  <quote>
-    <p>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur cumque optio laboriosam officiis accusamus consectetur earum culpa, deleniti magnam perferendis porro pariatur corporis ipsa aspernatur aut architecto adipisci, sunt suscipit.
-    </p>
-  </quote>
+  <main>
+    <sidebar v-if="authenticated" sidebar-type="mobile-sidebar"> </sidebar>
+
+    <app-header></app-header>
+
+    <div class="site-section">
+      <div class="container-fluid">
+        <div v-if="authenticated" class="row">
+          <div class="col-md-3 d-none d-lg-block">
+            <sidebar sidebar-type="desktop-sidebar"> </sidebar>
+          </div>
+          <div class="col-md-9">
+            <router-view></router-view>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
 </template>
 
 <script>
-import Quote from './components/Quote.vue'
+import Header from "./components/partials/Header.vue";
+import Sidebar from "./components/partials/Sidebar.vue";
+import { mapGetters } from 'vuex'
 
 export default {
+  components: {
+    "app-header": Header,
+    sidebar: Sidebar,
+  },
   data() {
     return {
       name: "Kaung Myat Soe",
     };
   },
-  components: {
-    quote : Quote,
+  computed: {
+    ...mapGetters([
+      'authenticated'
+    ])
   }
 };
 </script>
+<style>
+:root {
+  --plus-color: #08fa08;
+  --minus-color: #fa0808;
+}
+.light {
+  --bg-color: #fefefe;
+  --text-color: #333;
+}
+.dark {
+  --bg-color: #1a252f;
+  --text-color: #eee;
+}
+body {
+  font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  background-color: var(--bg-color);
+}
+p {
+  font-weight: 300;
+  color: var(--text-color);
+}
+a {
+  -webkit-transition: 0.3s all ease;
+  -o-transition: 0.3s all ease;
+  transition: 0.3s all ease;
+}
+a,
+a:hover {
+  text-decoration: none !important;
+}
 
+.bg-plus {
+  background-color: var(--plus-color);
+}
+.bg-minus {
+  background-color: var(--minus-color);
+}
+.site-section{
+  padding-top: 80px;
+}
+</style>
 
