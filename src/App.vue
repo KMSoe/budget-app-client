@@ -11,7 +11,7 @@
           <div class="col-md-3 d-none d-lg-block" v-if="authenticated">
             <sidebar sidebar-type="desktop-sidebar" :is-plus="true"> </sidebar>
           </div>
-          <div :class="[authenticated ? 'col-md-9' : 'col-md-9 mx-auto']">
+          <div :class="[authenticated ? 'col-md-9 mx-auto' : 'col-md-9 mx-auto']">
             <router-view v-slot="{ Component }">
               <transition name="slide" mode="out-in">
                 <component :is="Component" />
@@ -89,6 +89,12 @@ a:hover {
 }
 .bg-minus {
   background-color: var(--minus-color);
+}
+.plus{
+  color: var(--plus-color);
+}
+.minus{
+  color: var(--minus-color);
 }
 .site-section {
   padding-top: 80px;
