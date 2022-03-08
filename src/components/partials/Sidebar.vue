@@ -11,27 +11,27 @@
       <div class="nav-menu">
         <ul>
           <li>
-            <router-link to="/" :active-class="isPlus ? 'active plus' : 'active minus'"
+            <router-link :to="{name: 'home'}" :active-class="isPlus ? 'active plus' : 'active minus'"
               ><i class="fas fa-home me-2"></i>Dashboard</router-link
             >
           </li>
           <li>
-            <router-link to="/profile" :active-class="isPlus ? 'active plus' : 'active minus'"
+            <router-link :to="{name: 'profile'}" :active-class="isPlus ? 'active plus' : 'active minus'"
               ><i class="fas fa-user me-2"></i>Profile</router-link
             >
           </li>
           <li>
-            <router-link to="/categories" :active-class="isPlus ? 'active plus' : 'active minus'"
+            <router-link :to="{name: 'categories'}" :active-class="isPlus ? 'active plus' : 'active minus'"
               ><i class="fas fa-th-large me-2"></i>Categories</router-link
             >
           </li>
           <li>
-            <router-link to="/statistics" :active-class="isPlus ? 'active plus' : 'active minus'"
+            <router-link :to="{name: 'statistics'}" :active-class="isPlus ? 'active plus' : 'active minus'"
               ><i class="fas fa-chart-line me-2"></i>Statistics</router-link
             >
           </li>
           <li>
-            <a href="/"
+            <a href="#" role="button" @click="logout"
               ><i class="fas fa-sign-out-alt me-2"></i>Sign out</a
             >
           </li>
@@ -50,6 +50,11 @@ export default {
     isPlus: {
       type: Boolean,
       required: true,
+    },
+  },
+  methods: {
+    logout() {
+      this.$store.dispatch("logout");
     },
   },
 };

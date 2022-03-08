@@ -5,7 +5,13 @@
         <div class="col-lg-6">
           <div class="auth-form-card">
             <h1 class="text-center my-3">Welcome to Budget</h1>
-            <div class="alert alert-danger" v-for="(value, key) in errors" :key="key">{{ value[0] }}</div>
+            <div
+              class="alert alert-danger"
+              v-for="(value, key) in errors"
+              :key="key"
+            >
+              {{ value[0] }}
+            </div>
             <form
               class="mt-5"
               @submit.prevent="onSubmit"
@@ -221,7 +227,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['errors'])
+    ...mapGetters(["errors"]),
   },
   validations() {
     return {

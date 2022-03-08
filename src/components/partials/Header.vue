@@ -1,12 +1,16 @@
 <template>
   <header class="">
     <div class="container-fluid">
-      <nav class="main-nav d-flex pe-2" :class="[isPlus ? 'bg-plus' : 'bg-minus']">
+      <nav
+        class="main-nav d-flex pe-2"
+        :class="[isPlus ? 'bg-plus' : 'bg-minus']"
+      >
         <div class="ms-2">
-          <a  v-if="authenticated"
+          <a
+            v-if="authenticated"
             href="#"
             role="button"
-            class="d-lg-none js-menu-toggle"
+            class="d-lg-none js-menu-toggle text-white"
             data-toggle="collapse"
             data-target="#main-navbar"
           >
@@ -44,10 +48,10 @@
               class="dropdown-menu dropdown-menu-right bg-main"
               aria-labelledby="navbarDropdown"
             >
-              <router-link class="dropdown-item text-white hover" to="/profile">
+              <router-link class="dropdown-item" :to="{ name: 'profile' }">
                 Profile
               </router-link>
-              <a class="dropdown-item text-white hover" href="#" role="button">
+              <a class="dropdown-item" href="#" role="button" @click="logout">
                 Sign out
               </a>
             </div>
@@ -55,10 +59,20 @@
         </ul>
         <ul class="nav" v-else>
           <li class="nav-item dropdown">
-              <router-link :to="{name: 'signin'}" class="nav-link text-white" active-class="active bg-primary rounded">Signin</router-link>
+            <router-link
+              :to="{ name: 'signin' }"
+              class="nav-link text-white"
+              active-class="active bg-primary rounded"
+              >Signin</router-link
+            >
           </li>
           <li class="nav-item dropdown">
-              <router-link :to="{name: 'register'}" class="nav-link text-white" active-class="active bg-primary rounded">signup</router-link>
+            <router-link
+              :to="{ name: 'register' }"
+              class="nav-link text-white"
+              active-class="active bg-primary rounded"
+              >signup</router-link
+            >
           </li>
         </ul>
       </nav>
@@ -66,12 +80,22 @@
   </header>
 </template>
 <script>
-import { mapGetters } from "vuex"
+import { mapGetters } from "vuex";
 
 export default {
-  props: ["isPlus"],
+  props: {
+    isPlus: {
+      type: Boolean,
+      required: true,
+    },
+  },
   computed: {
     ...mapGetters(["authenticated"]),
+  },
+  methods: {
+    logout() {
+      this.$store.dispatch("logout");
+    },
   },
 };
 </script>

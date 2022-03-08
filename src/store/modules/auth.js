@@ -50,9 +50,10 @@ const actions = {
                     const tokenLife = res.data.data.life ? res.data.data.life : 1000 * 60 * 60 * 24 * 15;
                     const expirationDate = new Date(new Date().getTime() + tokenLife);
                     localStorage.setItem('token', res.data.data.token);
-                    localStorage.setItem('userId', res.data.data.id);
+                    localStorage.setItem('userId', res.data.id);
                     localStorage.setItem('expirationDate', expirationDate);
-                    commit('AUTH_USER', { id: res.data.data.id, token: res.data.data.token });
+                    commit('AUTH_USER', { id: res.data.id, token: res.data.data.token });
+                    commit('SET_USER', res.data.data.user);
                     commit('SET_AUTH', true);
                     router.push({ name: 'home' });
 
@@ -60,7 +61,7 @@ const actions = {
                 }
             })
             .catch(err => {
-                if(err.response.status === 400){
+                if (err.response.status === 400) {
                     commit('SET_ERROR', err.response.data.errors);
                 }
             })
@@ -75,9 +76,10 @@ const actions = {
                     const tokenLife = res.data.data.life ? res.data.data.life : 1000 * 60 * 60 * 24 * 15;
                     const expirationDate = new Date(new Date().getTime() + tokenLife);
                     localStorage.setItem('token', res.data.data.token);
-                    localStorage.setItem('userId', res.data.data.id);
+                    localStorage.setItem('userId', res.data.id);
                     localStorage.setItem('expirationDate', expirationDate);
-                    commit('AUTH_USER', { id: res.data.data.id, token: res.data.data.token });
+                    commit('AUTH_USER', { id: res.data.id, token: res.data.data.token });
+                    commit('SET_USER', res.data.data.user);
                     commit('SET_AUTH', true);
                     router.push({ name: 'home' });
 
@@ -85,31 +87,51 @@ const actions = {
                 }
             })
             .catch(err => {
-
+                if (err.response.status === 400) {
+                    commit('SET_ERROR', err.response.data.errors);
+                }
             })
     },
     tryAutoLogin({ commit }) {
-        const token = localStorage.getItem('token')
+        const token = localStorage.getItem('token');
         if (!token) {
             return
         }
-        const expirationDate = localStorage.getItem('expirationDate')
-        const now = new Date()
+        const expirationDate = localStorage.getItem('expirationDate');
+        const now = new Date();
+
         if (now >= expirationDate) {
             return
         }
+
         const userId = localStorage.getItem('userId')
-        commit('authUser', {
-            token: token,
-            userId: userId
-        })
+        commit('AUTH_USER', { id: userId, token });
+        // commit('SET_USER', res.data.data.user);
+        commit('SET_AUTH', true);
     },
     logout({ commit }) {
-        commit('clearAuthData')
-        localStorage.removeItem('expirationDate')
-        localStorage.removeItem('token')
-        localStorage.removeItem('userId')
-        router.replace('/signin')
+        axiosObj.post('/logout', {
+
+        }, {
+            headers: {
+                Authorization: `Bearer ${state.token}`
+            }
+        })
+            .then(res => {
+                if (res.status === 204) {
+                    commit('CLEAR_AUTH');
+                    localStorage.removeItem('expirationDate');
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('userId');
+                    router.push({ name: 'signin' });
+                }
+            })
+            .catch(err => {
+                if (err.response.status === 401) {
+                    commit('SET_ERROR', err.response.data.errors);
+                }
+            })
+
     },
     storeUser({ commit, state }, userData) {
 

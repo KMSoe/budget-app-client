@@ -5,8 +5,18 @@
         <div class="col-lg-6">
           <div class="auth-form-card">
             <h3 class="text-center mt-5 mb-1">Welcome Back</h3>
+            <div
+              class="alert alert-danger"
+              v-for="(value, key) in errors"
+              :key="key"
+            >
+              {{ value[0] }}
+            </div>
             <form class="mt-5" @submit.prevent="onSubmit">
-              <div class="form-floating mb-3 position-relative" :class="{ invalid_input: v$.email.$error }">
+              <div
+                class="form-floating mb-3 position-relative"
+                :class="{ invalid_input: v$.email.$error }"
+              >
                 <i
                   class="fas fa-envelope position-absolute input-field-symbol"
                 ></i>
@@ -30,7 +40,10 @@
                   >
                 </template>
               </div>
-              <div class="form-floating mb-3 position-relative" :class="{ invalid_input: v$.password.$error }">
+              <div
+                class="form-floating mb-3 position-relative"
+                :class="{ invalid_input: v$.password.$error }"
+              >
                 <i
                   class="
                     toggle-password
@@ -85,6 +98,8 @@
 <script>
 import useVuelidate from "@vuelidate/core";
 import { required, email } from "@vuelidate/validators";
+import { mapGetters } from "vuex";
+
 export default {
   setup() {
     return {
@@ -96,6 +111,9 @@ export default {
       email: "",
       password: "",
     };
+  },
+  computed: {
+    ...mapGetters(["errors"]),
   },
   validations() {
     return {
@@ -109,8 +127,7 @@ export default {
         email: this.email,
         password: this.password,
       };
-      console.log(authData);
-      // this.$store.dispatch("signin", authData);
+      this.$store.dispatch("signin", authData);
     },
   },
 };
@@ -155,7 +172,8 @@ input.form-control::placeholder {
   color: var(--text-color);
   font-size: 20px;
 }
-.invalid_input label, .invalid_input small{
+.invalid_input label,
+.invalid_input small {
   color: red;
-} 
+}
 </style>

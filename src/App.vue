@@ -1,14 +1,14 @@
 <template>
   <main>
-    <sidebar v-if="authenticated" sidebar-type="mobile-sidebar"> </sidebar>
+    <sidebar v-if="authenticated" sidebar-type="mobile-sidebar" :is-plus=true> </sidebar>
 
-    <app-header></app-header>
+    <app-header :is-plus=true></app-header>
 
     <div class="site-section">
       <div class="container-fluid">
         <div class="row">
           <div class="col-md-3 d-none d-lg-block" v-if="authenticated">
-            <sidebar sidebar-type="desktop-sidebar"> </sidebar>
+            <sidebar sidebar-type="desktop-sidebar" :is-plus=true> </sidebar>
           </div>
           <div :class="[ authenticated ? 'col-md-9' : 'col-md-9 mx-auto']">
             <router-view></router-view>
@@ -38,6 +38,9 @@ export default {
     ...mapGetters([
       'authenticated'
     ])
+  },
+  created() {
+    this.$store.dispatch('tryAutoLogin');
   }
 };
 </script>
@@ -73,7 +76,9 @@ a,
 a:hover {
   text-decoration: none !important;
 }
-
+.alert{
+  text-align: center;
+}
 .bg-plus {
   background-color: var(--plus-color);
 }
