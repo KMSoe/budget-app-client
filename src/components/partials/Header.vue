@@ -7,12 +7,12 @@
       >
         <div class="ms-2">
           <a
-            v-if="authenticated"
             href="#"
             role="button"
+            :class="[authenticated ? '' : 'd-none']"
             class="d-lg-none js-menu-toggle text-white"
-            data-toggle="collapse"
-            data-target="#main-navbar"
+            data-bs-toggle="collapse"
+            data-bs-target="#main-navbar"
           >
             <span><i class="fas fa-bars"></i></span>
           </a>
