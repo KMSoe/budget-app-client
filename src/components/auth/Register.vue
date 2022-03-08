@@ -5,7 +5,12 @@
         <div class="col-lg-6">
           <div class="auth-form-card">
             <h1 class="text-center my-3">Welcome to Budget</h1>
-            <form class="mt-5" @submit.prevent="onSubmit" enctype="multipart/form-data">
+            <div class="alert alert-danger" v-for="(value, key) in errors" :key="key">{{ value[0] }}</div>
+            <form
+              class="mt-5"
+              @submit.prevent="onSubmit"
+              enctype="multipart/form-data"
+            >
               <div
                 class="form-floating mb-3 position-relative"
                 :class="{ invalid_input: v$.name.$error }"
@@ -21,12 +26,17 @@
                 />
                 <label for="name">Your Name</label>
                 <template v-if="v$.name.$dirty">
-                  <small class="form-text error" v-if="v$.name.required.$invalid"
+                  <small
+                    class="form-text error"
+                    v-if="v$.name.required.$invalid"
                     >Name is required</small
                   >
                 </template>
               </div>
-              <div class="form-floating mb-3 position-relative" :class="{ invalid_input: v$.email.$error }">
+              <div
+                class="form-floating mb-3 position-relative"
+                :class="{ invalid_input: v$.email.$error }"
+              >
                 <i
                   class="fas fa-envelope position-absolute input-field-symbol"
                 ></i>
@@ -49,7 +59,10 @@
                   >
                 </template>
               </div>
-              <div class="form-floating mb-3 position-relative" :class="{ invalid_input: v$.password.$error }">
+              <div
+                class="form-floating mb-3 position-relative"
+                :class="{ invalid_input: v$.password.$error }"
+              >
                 <i
                   class="
                     toggle-password
@@ -83,7 +96,10 @@
                   >
                 </template>
               </div>
-              <div class="form-floating mb-3 position-relative" :class="{ invalid_input: v$.confirmPassword.$error }">
+              <div
+                class="form-floating mb-3 position-relative"
+                :class="{ invalid_input: v$.confirmPassword.$error }"
+              >
                 <i
                   class="
                     toggle-password
@@ -152,7 +168,12 @@
               <div>
                 <label for="image">Profile Image</label>
                 <div class="input-group mb-3">
-                  <input type="file" class="form-control" id="image" name="image"/>
+                  <input
+                    type="file"
+                    class="form-control"
+                    id="image"
+                    name="image"
+                  />
                 </div>
               </div>
 
@@ -181,6 +202,7 @@
 <script>
 import useVuelidate from "@vuelidate/core";
 import { required, email, minLength, sameAs } from "@vuelidate/validators";
+import { mapGetters } from "vuex";
 
 export default {
   setup() {
@@ -198,6 +220,9 @@ export default {
       image: "",
     };
   },
+  computed: {
+    ...mapGetters(['errors'])
+  },
   validations() {
     return {
       name: { required },
@@ -208,14 +233,14 @@ export default {
   },
   methods: {
     onSubmit() {
-        const authData = {
-            name: this.name,
-            email: this.email,
-            password: this.password,
-            gender: this.gender,
-            image: this.image,
-        }
-      this.$store.dispatch('signup', authData)
+      const authData = {
+        name: this.name,
+        email: this.email,
+        password: this.password,
+        gender: this.gender,
+        image: this.image,
+      };
+      this.$store.dispatch("signup", authData);
     },
   },
 };

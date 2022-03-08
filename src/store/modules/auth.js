@@ -1,10 +1,12 @@
 import axiosObj from '../../axios-config'
+import router from '../../router/index'
 
 const state = {
     token: null,
     userId: null,
     user: null,
     authenticated: false,
+    authErrors: null,
 }
 
 const mutations = {
@@ -25,6 +27,9 @@ const mutations = {
         state.authenticated = false;
         router.replace({ name: 'signin' });
     },
+    'SET_ERROR'(state, errors) {
+        state.authErrors = errors;
+    }
 }
 
 const actions = {
@@ -54,7 +59,11 @@ const actions = {
                     dispatch('setLogoutTimer', tokenLife);
                 }
             })
-            .catch(error => console.log(error))
+            .catch(err => {
+                if(err.response.status === 400){
+                    commit('SET_ERROR', err.response.data.errors);
+                }
+            })
     },
     signin({ commit, dispatch }, authData) {
         axiosObj.post('/login', {
@@ -119,6 +128,9 @@ const getters = {
     },
     token(state) {
         return state.token;
+    },
+    errors(state) {
+        return state.authErrors;
     }
 }
 
