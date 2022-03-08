@@ -3,12 +3,13 @@
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-lg-6">
-          <div class="login-form-card">
+          <div class="auth-form-card">
             <h1 class="text-center my-3">Welcome to Budget</h1>
-            <form action="" method="POST" class="mt-5">
-              <div class="form-floating mb-3 position-relative">
+            <form class="mt-5" @submit.prevent="onSubmit">
+              <div class="mb-3 position-relative">
                 <i class="fas fa-user position-absolute input-field-symbol">
                 </i>
+                <label for="username">Your Name</label>
                 <input
                   type="text"
                   id="username"
@@ -16,13 +17,13 @@
                   name="username"
                   placeholder="username"
                 />
-                <label for="username">Your Name</label>
                 <small>Name is required!</small>
               </div>
-              <div class="form-floating mb-3 position-relative">
+              <div class="mb-3 position-relative">
                 <i
                   class="fas fa-envelope position-absolute input-field-symbol"
                 ></i>
+                <label for="email">Email</label>
                 <input
                   type="email"
                   id="email"
@@ -30,10 +31,9 @@
                   name="email"
                   placeholder="Email"
                 />
-                <label for="email">Email</label>
                 <small>Email is required!</small>
               </div>
-              <div class="form-floating mb-3 position-relative">
+              <div class="mb-3 position-relative">
                 <i
                   class="
                     toggle-password
@@ -45,18 +45,17 @@
                   style="cursor: pointer"
                 >
                 </i>
+                <label for="password">Password</label>
                 <input
                   type="password"
-                  id="password"
                   class="form-control"
                   name="password"
                   placeholder="password"
                 />
 
-                <label for="password">Password</label>
                 <small>Minium - 8</small>
               </div>
-              <div class="form-floating mb-3 position-relative">
+              <div class="mb-3 position-relative">
                 <i
                   class="
                     toggle-password
@@ -68,15 +67,14 @@
                   style="cursor: pointer"
                 >
                 </i>
+                <label for="password">Confirm Password</label>
                 <input
                   type="password"
-                  id="password"
                   class="form-control"
                   name="password"
                   placeholder="password"
                 />
 
-                <label for="password">Confirm Password</label>
                 <small>Password are not match!</small>
               </div>
               <button
@@ -89,11 +87,11 @@
             </form>
             <p class="text-center mt-4">
               Already have an account? Sign in
-              <a
-                href="signin.html"
+              <router-link
+                to="/signin"
                 class="text-primary text-decoration-underline"
-                >here.</a
-              >
+                >here.
+              </router-link>
             </p>
           </div>
         </div>
@@ -101,3 +99,13 @@
     </div>
   </section>
 </template>
+<script>
+export default {
+  setup() {},
+  methods: {
+    onSubmit() {
+      console.log("register");
+    },
+  },
+};
+</script>

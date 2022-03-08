@@ -1,7 +1,7 @@
 <template>
   <header class="">
     <div class="container-fluid">
-      <nav class="main-nav d-flex" :class="[isPlus ? 'bg-plus' : 'bg-minus']">
+      <nav class="main-nav d-flex pe-2" :class="[isPlus ? 'bg-plus' : 'bg-minus']">
         <div class="ms-2">
           <a  v-if="authenticated"
             href="#"
@@ -55,10 +55,10 @@
         </ul>
         <ul class="nav" v-else>
           <li class="nav-item dropdown">
-              <router-link :to="{name: 'signin'}" class="nav-link" active-class="active">Signin</router-link>
+              <router-link :to="{name: 'signin'}" class="nav-link text-white" active-class="active bg-primary rounded">Signin</router-link>
           </li>
           <li class="nav-item dropdown">
-              <router-link :to="{name: 'register'}" class="nav-link" active-class="active">Register</router-link>
+              <router-link :to="{name: 'register'}" class="nav-link text-white" active-class="active bg-primary rounded">Register</router-link>
           </li>
         </ul>
       </nav>
@@ -76,7 +76,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 header {
   border-bottom: 1px solid #3f3f3f;
 }
