@@ -5,35 +5,51 @@
         <div class="col-lg-6">
           <div class="auth-form-card">
             <h1 class="text-center my-3">Welcome to Budget</h1>
-            <form class="mt-5" @submit.prevent="onSubmit">
-              <div class="mb-3 position-relative">
+            <form class="mt-5" @submit.prevent="onSubmit" enctype="multipart/form-data">
+              <div
+                class="form-floating mb-3 position-relative"
+                :class="{ invalid_input: v$.name.$error }"
+              >
                 <i class="fas fa-user position-absolute input-field-symbol">
                 </i>
-                <label for="username">Your Name</label>
                 <input
                   type="text"
-                  id="username"
+                  id="name"
                   class="form-control"
-                  name="username"
-                  placeholder="username"
+                  placeholder="Name"
+                  v-model="v$.name.$model"
                 />
-                <small>Name is required!</small>
+                <label for="name">Your Name</label>
+                <template v-if="v$.name.$dirty">
+                  <small class="form-text error" v-if="v$.name.required.$invalid"
+                    >Name is required</small
+                  >
+                </template>
               </div>
-              <div class="mb-3 position-relative">
+              <div class="form-floating mb-3 position-relative" :class="{ invalid_input: v$.email.$error }">
                 <i
                   class="fas fa-envelope position-absolute input-field-symbol"
                 ></i>
-                <label for="email">Email</label>
                 <input
                   type="email"
                   id="email"
+                  v-model="v$.email.$model"
                   class="form-control"
-                  name="email"
                   placeholder="Email"
                 />
-                <small>Email is required!</small>
+                <label for="email">Email</label>
+                <template v-if="v$.email.$dirty">
+                  <small
+                    class="form-text error"
+                    v-if="v$.email.required.$invalid"
+                    >email is required</small
+                  >
+                  <small class="form-text error" v-if="v$.email.email.$invalid"
+                    >Invalid email</small
+                  >
+                </template>
               </div>
-              <div class="mb-3 position-relative">
+              <div class="form-floating mb-3 position-relative" :class="{ invalid_input: v$.password.$error }">
                 <i
                   class="
                     toggle-password
@@ -45,17 +61,29 @@
                   style="cursor: pointer"
                 >
                 </i>
+                <input
+                  type="password"
+                  id="password"
+                  class="form-control"
+                  placeholder="password"
+                  v-model="v$.password.$model"
+                />
                 <label for="password">Password</label>
-                <input
-                  type="password"
-                  class="form-control"
-                  name="password"
-                  placeholder="password"
-                />
-
-                <small>Minium - 8</small>
+                <template v-if="v$.password.$dirty">
+                  <small
+                    class="form-text error"
+                    v-if="v$.password.required.$invalid"
+                    >password is required</small
+                  >
+                  <small
+                    class="form-text error"
+                    v-if="v$.password.minLength.$invalid"
+                    >Password must be at least
+                    {{ v$.password.minLength.$params.min }} characters</small
+                  >
+                </template>
               </div>
-              <div class="mb-3 position-relative">
+              <div class="form-floating mb-3 position-relative" :class="{ invalid_input: v$.confirmPassword.$error }">
                 <i
                   class="
                     toggle-password
@@ -67,22 +95,73 @@
                   style="cursor: pointer"
                 >
                 </i>
-                <label for="password">Confirm Password</label>
                 <input
                   type="password"
                   class="form-control"
                   name="password"
+                  id="confirmPassword"
                   placeholder="password"
+                  v-model="v$.confirmPassword.$model"
                 />
 
-                <small>Password are not match!</small>
+                <label for="confirmPassword">Confirm Password</label>
+                <template v-if="v$.confirmPassword.$dirty">
+                  <small
+                    class="form-text error"
+                    v-if="v$.confirmPassword.sameAs.$invalid"
+                    >Passwords don't match!!!</small
+                  >
+                </template>
               </div>
+              <div class="mb-3 d-flex">
+                <label for="" class="me-3">Gender: </label>
+                <div class="form-check me-3">
+                  <input
+                    type="radio"
+                    class="form-check-input"
+                    id="male"
+                    name="gender"
+                    value="male"
+                    v-model="gender"
+                  />
+                  <label for="male">Male</label>
+                </div>
+                <div class="form-check me-3">
+                  <input
+                    type="radio"
+                    class="form-check-input"
+                    id="female"
+                    name="gender"
+                    value="female"
+                    v-model="gender"
+                  />
+                  <label for="female">Female</label>
+                </div>
+                <div class="form-check">
+                  <input
+                    type="radio"
+                    class="form-check-input"
+                    id="others"
+                    name="gender"
+                    value="others"
+                    v-model="gender"
+                  />
+                  <label for="others">Others</label>
+                </div>
+              </div>
+              <div>
+                <label for="image">Profile Image</label>
+                <div class="input-group mb-3">
+                  <input type="file" class="form-control" id="image" name="image"/>
+                </div>
+              </div>
+
               <button
                 type="submit"
-                id="budget-submit"
                 class="btn btn-primary rounded"
+                :disabled="v$.$invalid"
               >
-                Register
+                signup
               </button>
             </form>
             <p class="text-center mt-4">
@@ -100,11 +179,43 @@
   </section>
 </template>
 <script>
+import useVuelidate from "@vuelidate/core";
+import { required, email, minLength, sameAs } from "@vuelidate/validators";
+
 export default {
-  setup() {},
+  setup() {
+    return {
+      v$: useVuelidate(),
+    };
+  },
+  data() {
+    return {
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      gender: "",
+      image: "",
+    };
+  },
+  validations() {
+    return {
+      name: { required },
+      email: { required, email },
+      password: { required, minLength: minLength(6) },
+      confirmPassword: { sameAs: sameAs(this.password) },
+    };
+  },
   methods: {
     onSubmit() {
-      console.log("register");
+        const authData = {
+            name: this.name,
+            email: this.email,
+            password: this.password,
+            gender: this.gender,
+            image: this.image,
+        }
+      this.$store.dispatch('signup', authData)
     },
   },
 };

@@ -13,7 +13,7 @@
             <span><i class="fas fa-bars"></i></span>
           </a>
 
-          <router-link to="/" class="navbar-brand ms-2 text-secondary">
+          <router-link to="/" class="navbar-brand ms-2 text-white bold">
             <b>Budget</b>
           </router-link>
         </div>
@@ -58,7 +58,7 @@
               <router-link :to="{name: 'signin'}" class="nav-link text-white" active-class="active bg-primary rounded">Signin</router-link>
           </li>
           <li class="nav-item dropdown">
-              <router-link :to="{name: 'register'}" class="nav-link text-white" active-class="active bg-primary rounded">Register</router-link>
+              <router-link :to="{name: 'register'}" class="nav-link text-white" active-class="active bg-primary rounded">signup</router-link>
           </li>
         </ul>
       </nav>

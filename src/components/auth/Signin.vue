@@ -3,11 +3,10 @@
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-lg-6">
-          <div class="login-form-card">
-            <h1 class="text-center my-3">Budget</h1>
+          <div class="auth-form-card">
             <h3 class="text-center mt-5 mb-1">Welcome Back</h3>
-            <form action="" method="POST" class="mt-5">
-              <div class="form-floating mb-3 position-relative">
+            <form class="mt-5" @submit.prevent="onSubmit">
+              <div class="form-floating mb-3 position-relative" :class="{ invalid_input: v$.email.$error }">
                 <i
                   class="fas fa-envelope position-absolute input-field-symbol"
                 ></i>
@@ -17,11 +16,21 @@
                   class="form-control"
                   name="email"
                   placeholder="Email"
+                  v-model="v$.email.$model"
                 />
                 <label for="email">Email</label>
-                <small>Email is required!</small>
+                <template v-if="v$.email.$dirty">
+                  <small
+                    class="form-text error"
+                    v-if="v$.email.required.$invalid"
+                    >email is required</small
+                  >
+                  <small class="form-text error" v-if="v$.email.email.$invalid"
+                    >Invalid email</small
+                  >
+                </template>
               </div>
-              <div class="form-floating mb-3 position-relative">
+              <div class="form-floating mb-3 position-relative" :class="{ invalid_input: v$.password.$error }">
                 <i
                   class="
                     toggle-password
@@ -39,15 +48,22 @@
                   class="form-control"
                   name="password"
                   placeholder="password"
+                  v-model="v$.password.$model"
                 />
-
                 <label for="password">Password</label>
-                <small>Password is required!</small>
+                <template v-if="v$.password.$dirty">
+                  <small
+                    class="form-text error"
+                    v-if="v$.password.required.$invalid"
+                    >password is required</small
+                  >
+                </template>
               </div>
               <button
                 type="submit"
                 id="budget-submit"
                 class="btn btn-primary rounded"
+                :disabled="v$.$invalid"
               >
                 Sign in
               </button>
@@ -67,14 +83,42 @@
   </section>
 </template>
 <script>
+import useVuelidate from "@vuelidate/core";
+import { required, email } from "@vuelidate/validators";
 export default {
-  setup() {},
+  setup() {
+    return {
+      v$: useVuelidate(),
+    };
+  },
+  data() {
+    return {
+      email: "",
+      password: "",
+    };
+  },
+  validations() {
+    return {
+      email: { required, email },
+      password: { required },
+    };
+  },
+  methods: {
+    onSubmit() {
+      const authData = {
+        email: this.email,
+        password: this.password,
+      };
+      console.log(authData);
+      // this.$store.dispatch("signin", authData);
+    },
+  },
 };
 </script>
 <style>
 .login-section,
 .register-section {
-  padding: 10vh 0;
+  padding: 5vh 0;
 }
 .login-section p,
 .register-section p {
@@ -102,9 +146,8 @@ input.form-control {
   background-color: var(--bg-color) !important;
   color: var(--text-color) !important;
 }
-input.form-control::placeholder,
-form small {
-  color: #ababab;
+input.form-control::placeholder {
+  color: var(--text-color);
 }
 .input-field-symbol {
   top: 28%;
@@ -112,4 +155,7 @@ form small {
   color: var(--text-color);
   font-size: 20px;
 }
+.invalid_input label, .invalid_input small{
+  color: red;
+} 
 </style>

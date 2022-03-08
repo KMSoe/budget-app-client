@@ -34,23 +34,25 @@ const actions = {
         }, tokenLife);
     },
     signup({ commit, dispatch }, authData) {
-        axiosObj.post('/login', {
+        axiosObj.post('/register', {
+            name: authData.name,
             email: authData.email,
             password: authData.password,
+            gender: authData.gender,
         })
             .then(res => {
-                console.log(res)
-                commit('authUser', {
-                    token: res.data.idToken,
-                    userId: res.data.localId
-                })
-                const now = new Date()
-                const expirationDate = new Date(now.getTime() + res.data.expiresIn * 1000)
-                localStorage.setItem('token', res.data.idToken)
-                localStorage.setItem('userId', res.data.localId)
-                localStorage.setItem('expirationDate', expirationDate)
-                dispatch('storeUser', authData)
-                dispatch('setLogoutTimer', res.data.expiresIn)
+                if (res.status === 201) {
+                    const tokenLife = res.data.data.life ? res.data.data.life : 1000 * 60 * 60 * 24 * 15;
+                    const expirationDate = new Date(new Date().getTime() + tokenLife);
+                    localStorage.setItem('token', res.data.data.token);
+                    localStorage.setItem('userId', res.data.data.id);
+                    localStorage.setItem('expirationDate', expirationDate);
+                    commit('AUTH_USER', { id: res.data.data.id, token: res.data.data.token });
+                    commit('SET_AUTH', true);
+                    router.push({ name: 'home' });
+
+                    dispatch('setLogoutTimer', tokenLife);
+                }
             })
             .catch(error => console.log(error))
     },

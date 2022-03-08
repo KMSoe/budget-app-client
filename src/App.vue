@@ -10,7 +10,7 @@
           <div class="col-md-3 d-none d-lg-block" v-if="authenticated">
             <sidebar sidebar-type="desktop-sidebar"> </sidebar>
           </div>
-          <div class="col-md-9">
+          <div :class="[ authenticated ? 'col-md-9' : 'col-md-9 mx-auto']">
             <router-view></router-view>
           </div>
         </div>
