@@ -1,5 +1,4 @@
 import $ from 'jquery';
-window.$ = $;
 
 $(function () {
 
@@ -79,5 +78,11 @@ $(function () {
 	function showNav() {
 		$(".main-nav").removeClass("hidden").addClass("visible");
 	}
+	$("#pick-month-btn").click(()=> {
+		$(".dp__main input").focus();
+	})
 
+	// $(".total-balance-section .dp__input_wrap input").attr('type', 'hidden');
+
+	
 });

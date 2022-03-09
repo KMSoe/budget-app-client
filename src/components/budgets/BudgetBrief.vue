@@ -6,7 +6,9 @@
         style="background-color: unset"
       >
         <a
-          class="btn bg-primary text-white select-btn py-1 px-3 my-2"
+          href="#"
+          role="button"
+          class="btn bg-primary text-white py-1 px-3 my-2"
           id="pick-month-btn"
           style="border-radius: 12px"
         >
@@ -15,6 +17,13 @@
             {{ brief.year }}&nbsp;&dash;&nbsp;{{ brief.month }}
           </span>
         </a>
+        <Datepicker
+          v-model="month"
+          monthPicker
+          class="d-inline-block ms-3"
+          style="width: 150px"
+          @input="changeMonth"
+        />
 
         <div class="card-body">
           <h3 class="h5">Total Balance</h3>
@@ -91,13 +100,57 @@
   </section>
   <!-- Total Income, Expense Section End -->
   <budget-add-modal />
+  <!-- Select Month modal -->
+  <div class="modal" id="select-month">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="ps-3 py-3">
+          <h5 class="modal-title text-center">Select a month</h5>
+        </div>
+        <div class="modal-body">
+          <form action="/home" method="GET" id="select-month-form">
+            <input
+              type="text"
+              name="time"
+              id="monthpicker"
+              placeholder="Select a month"
+              class="form-control"
+              autocomplete="off"
+              onkeyup="disableButtonSelectMonth(this)"
+            />
+          </form>
+        </div>
+        <div class="text-center pt-2 pb-3">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">
+            Cancel
+          </button>
+          <button
+            class="ms-3 btn btn-primary"
+            form="select-month-form"
+            id="btnsubmit"
+            type="submit"
+          >
+            Ok
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
 import BudgetAddModal from "../partials/BudgetAddModal.vue";
+import { ref } from 'vue';
 
 export default {
   components: {
     "budget-add-modal": BudgetAddModal,
+  },
+  setup() {
+    const d = new Date();
+    const month = ref({ month: d.getMonth(), year: d.getFullYear() })
+    return {
+      month,
+    };
   },
   props: {
     brief: {
@@ -105,6 +158,11 @@ export default {
       required: true,
     },
   },
+  methods: {
+    changeMonth() {
+      console.log('change');
+    }
+  }
 };
 </script>
 <style scoped>
