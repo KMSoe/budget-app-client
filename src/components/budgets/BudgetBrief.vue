@@ -6,18 +6,23 @@
         style="background-color: unset"
       >
         <a
-          class="btn bg-active text-white select-btn py-1 px-3 my-2"
+          class="btn bg-primary text-white select-btn py-1 px-3 my-2"
           id="pick-month-btn"
+          style="border-radius: 12px"
         >
           <i class="fas fa-calendar-alt me-2"></i>
-          <span id="year-month"> </span>
+          <span id="year-month">
+            {{ brief.year }}&nbsp;&dash;&nbsp;{{ brief.month }}
+          </span>
         </a>
 
         <div class="card-body">
           <h3 class="h5">Total Balance</h3>
           <div class="row">
             <div class="col-10">
-              <span class="total-balance font-weight-bold text-white"> </span>
+              <span class="total-balance font-weight-bold">
+                {{ brief.net_budget }}
+              </span>
 
               <p class="minus font-weight-bold mt-2">You have No Income.</p>
 
@@ -64,7 +69,7 @@
           <div class="bg-plus card-body position-relative text-white">
             <h3 class="card-title h4">Total Income</h3>
             <span class="total-income-value font-weight-bold">
-              550,000
+              {{ brief.income }}
             </span>
           </div>
         </div>
@@ -77,7 +82,7 @@
           <div class="bg-minus card-body position-relative text-white">
             <h3 class="card-title h4">Total Expense</h3>
             <span class="total-expense-value font-weight-bold">
-              68,000
+              {{ brief.expense }}
             </span>
           </div>
         </div>
@@ -85,32 +90,48 @@
     </div>
   </section>
   <!-- Total Income, Expense Section End -->
+  <budget-add-modal />
 </template>
+<script>
+import BudgetAddModal from "../partials/BudgetAddModal.vue";
+
+export default {
+  components: {
+    "budget-add-modal": BudgetAddModal,
+  },
+  props: {
+    brief: {
+      type: Object,
+      required: true,
+    },
+  },
+};
+</script>
 <style scoped>
 .add-button {
-    top: 50%;
-    right: 5%;
-    transform: translateY(-50%);
-    background-color: #1da1f2;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+  top: 50%;
+  right: 5%;
+  transform: translateY(-50%);
+  background-color: #1da1f2;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
 }
 .add-button i {
-    color: white;
-    font-size: 24px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  color: white;
+  font-size: 24px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 @media screen and (min-width: 768px) {
-    .add-button {
-        width: 50px;
-        height: 50px;
-    }
-    .add-button i {
-        font-size: 28px;
-    }
+  .add-button {
+    width: 50px;
+    height: 50px;
+  }
+  .add-button i {
+    font-size: 28px;
+  }
 }
 </style>

@@ -1,35 +1,28 @@
 <template>
-  <div>
-    <h1>Hello {{ name }}</h1>
-    <input type="text" v-model="name" />
-    <p>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo
-      laudantium consectetur excepturi tempora molestias commodi blanditiis
-      repellat quia, quasi corrupti nesciunt dolorem. Hic reprehenderit
-      voluptatibus ad itaque, tenetur perspiciatis repellendus in repellat
-      numquam illum quae recusandae similique non, excepturi expedita tempore
-      magnam asperiores atque. Aperiam, ipsam veritatis doloremque porro, vitae
-      earum et dolore numquam quo nobis mollitia ducimus. Provident quaerat
-      expedita ullam id illo quasi libero reiciendis eligendi voluptas error
-      accusamus minimadita officiis veniam voluptatum vero fugit maioresaliquid
-      quibusdam ullam incidunt neque? Laboriosam illum alias laborum molestias
-      explicabo, excepturi ratione suscipit vero animi minima provident
-      similique eligendi dolore. Quam, eos? Architecto recusandae delectus
-      dolore, animi autem voluptatem omnis amet soluta nisi natus. Odit
-      excepturi voluptas quisquam, neque animi laboriosam deserunt doloremque id
-      adipisci? Ipsa dolor voluptatum ratione, ipsum accusamus perferendis
-      soluta expedita, atque esse quia quae facere doloribus, totam consequatur
-      eligendi aut possimu
-    </p>
+  <div class="row">
+    <div class="col-lg-8">
+      <budget-brief :brief="brief"></budget-brief>
+    </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+import BudgetBrief from "./budgets/BudgetBrief.vue";
+
 export default {
-  data() {
-    return {
-      name: "Kaung Myat Soe",
-    };
+  components: {
+    "budget-brief": BudgetBrief,
+  },
+  computed: {
+    ...mapGetters({ brief: "monthlyBrief" }, { cards: "dailyCards" }),
+  },
+  created() {
+    const d = new Date();
+    const month = d.getMonth() + 1;
+    const year = d.getFullYear();
+    this.$store.dispatch("fetchMonthlyBrief", { month, year });
+    this.$store.dispatch("fetchDailyBudgetCards", { month, year });
   },
 };
 </script>
