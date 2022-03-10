@@ -24,7 +24,7 @@
               <label for="date" class="">Date</label>
             </div>
             <div class="col-sm-9 form-group position-relative">
-              <Datepicker v-model="date" />
+              <Datepicker v-model="date" datepicker />
             </div>
           </div>
           <div class="row g-0 mb-3">
@@ -38,7 +38,15 @@
                 name="category_id"
                 class="w-100 form-select"
               >
-                <!-- <option :value="cat.id">{{ cat.name }}</option> -->
+                <option
+                  v-for="cat in categories"
+                  :key="cat.id"
+                  :value="cat.id"
+                  :style="{ backgroundColor: cat.icon.color }"
+                  class="text-white"
+                >
+                  {{ cat.name }}
+                </option>
               </select>
             </div>
           </div>
@@ -101,20 +109,26 @@ import { ref } from "vue";
 
 export default {
   setup() {
-    const d = new Date();
-    const month = ref({ month: d.getMonth(), year: d.getFullYear() });
+    const date = ref(new Date());
     return {
-      month,
+      date,
     };
   },
   computed: {
     type() {
-        const type = this.$route.params.type;
-      return `${type.charAt(0).toUpperCase()}${type.slice(1)}`
+      const type = this.$route.params.type;
+      return `${type.charAt(0).toUpperCase()}${type.slice(1)}`;
     },
     categories() {
-        
-    }
+      if (this.type == "Income") {
+        return this.$store.getters.incomeCategories;
+      } else {
+        return this.$store.getters.expenseCategories;
+      }
+    },
+  },
+  created() {
+    this.$store.dispatch("fetchCategories", this.type);
   },
 };
 </script>
