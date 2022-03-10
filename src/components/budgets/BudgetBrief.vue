@@ -33,16 +33,16 @@
                 {{ brief.net_budget }}
               </span>
 
-              <p class="minus font-weight-bold mt-2">You have No Income.</p>
+              <p class="minus font-weight-bold mt-2" v-if="brief.income == 0">You have No Income.</p>
 
-              <p class="minus font-weight-bold mt-2">
+              <p class="minus font-weight-bold mt-2" v-else-if="brief.net_budget < 0">
                 Your Expense is greater than your Income.
               </p>
 
-              <p class="minus font-weight-bold mt-2">You have No Expense.</p>
+              <p class="minus font-weight-bold mt-2" v-else-if="brief.expense == 0">You have No Expense.</p>
 
-              <p class="minus font-weight-bold mt-2">
-                You have spent 20% of your Income in February.
+              <p class="minus font-weight-bold mt-2" v-else>
+                You have spent {{ brief.percentage }}% of your Income in February.
               </p>
             </div>
             <div class="col-2 add-button">
@@ -100,42 +100,6 @@
   </section>
   <!-- Total Income, Expense Section End -->
   <budget-add-modal />
-  <!-- Select Month modal -->
-  <div class="modal" id="select-month">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="ps-3 py-3">
-          <h5 class="modal-title text-center">Select a month</h5>
-        </div>
-        <div class="modal-body">
-          <form action="/home" method="GET" id="select-month-form">
-            <input
-              type="text"
-              name="time"
-              id="monthpicker"
-              placeholder="Select a month"
-              class="form-control"
-              autocomplete="off"
-              onkeyup="disableButtonSelectMonth(this)"
-            />
-          </form>
-        </div>
-        <div class="text-center pt-2 pb-3">
-          <button class="btn btn-secondary" data-bs-dismiss="modal">
-            Cancel
-          </button>
-          <button
-            class="ms-3 btn btn-primary"
-            form="select-month-form"
-            id="btnsubmit"
-            type="submit"
-          >
-            Ok
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
 </template>
 <script>
 import BudgetAddModal from "../partials/BudgetAddModal.vue";
@@ -160,7 +124,7 @@ export default {
   },
   methods: {
     changeMonth() {
-      this.$store.dispatch("fetchMonthlyBrief", {
+      this.$store.dispatch("featchMonthlyBudgets", {
         month: this.month.month + 1,
         year: this.month.year,
       });

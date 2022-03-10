@@ -1,17 +1,19 @@
 <template>
   <main>
-    <sidebar v-if="authenticated" sidebar-type="mobile-sidebar" :is-plus="true">
+    <sidebar v-if="authenticated" sidebar-type="mobile-sidebar" :is-plus="isPlus">
     </sidebar>
 
-    <app-header :is-plus="true"></app-header>
+    <app-header :is-plus="isPlus"></app-header>
 
     <div class="site-section">
       <div class="container-fluid">
         <div class="row">
           <div class="col-lg-3 d-none d-lg-block" v-if="authenticated">
-            <sidebar sidebar-type="desktop-sidebar" :is-plus="true"> </sidebar>
+            <sidebar sidebar-type="desktop-sidebar" :is-plus="isPlus"> </sidebar>
           </div>
-          <div :class="[authenticated ? 'col-lg-9 mx-auto' : 'col-lg-9 mx-auto']">
+          <div
+            :class="[authenticated ? 'col-lg-9 mx-auto' : 'col-lg-9 mx-auto']"
+          >
             <router-view v-slot="{ Component }">
               <transition name="slide" mode="out-in">
                 <component :is="Component" />
@@ -40,7 +42,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["authenticated"]),
+    ...mapGetters({ authenticated: "authenticated", isPlus: "isPlus" }),
   },
   created() {
     this.$store.dispatch("tryAutoLogin");
@@ -90,10 +92,10 @@ a:hover {
 .bg-minus {
   background-color: var(--minus-color);
 }
-.plus{
+.plus {
   color: var(--plus-color);
 }
-.minus{
+.minus {
   color: var(--minus-color);
 }
 .site-section {

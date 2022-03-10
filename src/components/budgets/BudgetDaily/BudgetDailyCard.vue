@@ -1,25 +1,29 @@
 <template>
   <div class="card daily-stat-card rounded mb-3">
     <div class="card-header d-flex px-2">
-      <span class="flex-fill me-2"> Feb 28 </span>
-      <span class="me-2">Income: 50000 </span>
-      <span class="me-2">Expense: 2500 </span>
+      <span class="flex-fill me-2"> {{ card.day }} </span>
+      <span class="me-2">Income: {{ card.income }} </span>
+      <span class="me-2">Expense: {{ card.expense }} </span>
     </div>
     <div class="card-body p-0">
       <ul class="mb-0 px-0">
-        <li class="d-flex py-2 px-3">
+        <li class="d-flex py-2 px-3" v-for="item in card.items" :key="item.id">
           <i
-            class="cat-icon fas fa-dollar-sign me-3 my-auto"
-            style="background-color: green"
+            :class="`cat-icon me-3 my-auto ${item.class}`"
+            :style="{ backgroundColor: item.color}"
           ></i>
           <span class="flex-fill my-auto"
-            >Bonus <br />
-            <span class="text-muted"></span
-          ></span>
-          <span
-            class="{{ $item->amount > 0 ? 'plus' : 'minus' }} font-weight-bold my-auto"
+            >{{ item.name }} <br />
+            <span class="text-muted">{{ item.remark }}</span></span
           >
-            50000
+          <span
+            :class="[
+              item.amount > 0
+                ? 'plus font-weight-bold my-auto'
+                : 'minus font-weight-bold my-auto',
+            ]"
+          >
+            {{ item.amount }}
           </span>
 
           <span class="my-auto ms-2" style="width: 40px; height: 40px">
@@ -30,11 +34,21 @@
     </div>
     <div class="card-footer">
       <p class="mb-0" style="letter-spacing: 1px">
-        20% of your monthly Income was spent.
+        {{ card.percentage }}% of your monthly Income was spent.
       </p>
     </div>
   </div>
 </template>
+<script>
+export default {
+  props: {
+    card: {
+      type: Object,
+      required: true,
+    },
+  },
+};
+</script>
 <style>
 i.cat-icon {
   color: white;

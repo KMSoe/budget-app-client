@@ -16,6 +16,10 @@ const mutations = {
 }
 
 const actions = {
+    featchMonthlyBudgets({commit, dispatch}, {month, year}){
+        dispatch('fetchMonthlyBrief', {month, year});
+        dispatch('fetchDailyBudgetCards', {month, year});
+    },
     fetchMonthlyBrief({ commit }, { month, year }) {
         axiosObj.get('/budgets/brief', {
             headers: {
@@ -35,12 +39,33 @@ const actions = {
                 }
             })
     },
-    
+    fetchDailyBudgetCards({ commit }, { month, year }) {
+        axiosObj.get('/budgets', {
+            headers: {
+                Authorization: `Bearer ${store.getters.token}`
+            },
+            params: {
+                month,
+                year
+            }
+        })
+            .then(res => {
+                commit('SET_DAILY_CARDS', res.data.data.daily_cards);
+            })
+            .catch(err => {
+                if (err.response) {
+                    console.log('err')
+                }
+            })
+    },
 }
 
 const getters = {
     monthlyBrief(state) {
         return state.monthlyBrief;
+    },
+    isPlus(state) {
+        return store.getters.authenticated ? state.monthlyBrief.net_budget > 0 : true;
     },
     dailyCards(state) {
         return state.dailyCards;
