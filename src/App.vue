@@ -1,6 +1,10 @@
 <template>
   <main>
-    <sidebar v-if="authenticated" sidebar-type="mobile-sidebar" :is-plus="isPlus">
+    <sidebar
+      v-if="authenticated"
+      sidebar-type="mobile-sidebar"
+      :is-plus="isPlus"
+    >
     </sidebar>
 
     <app-header :is-plus="isPlus"></app-header>
@@ -9,7 +13,8 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-lg-3 d-none d-lg-block" v-if="authenticated">
-            <sidebar sidebar-type="desktop-sidebar" :is-plus="isPlus"> </sidebar>
+            <sidebar sidebar-type="desktop-sidebar" :is-plus="isPlus">
+            </sidebar>
           </div>
           <div
             :class="[authenticated ? 'col-lg-9 mx-auto' : 'col-lg-9 mx-auto']"
@@ -46,6 +51,8 @@ export default {
   },
   created() {
     this.$store.dispatch("tryAutoLogin");
+    this.$store.dispatch("fetchCategories", "Income");
+    this.$store.dispatch("fetchCategories", "Expense");
   },
 };
 </script>

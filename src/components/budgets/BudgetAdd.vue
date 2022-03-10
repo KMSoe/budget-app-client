@@ -16,7 +16,7 @@
           ></i>
           Add {{ type }}
         </h4>
-        <form class="add-item-form">
+        <form class="add-item-form" @submit.prevent="onSubmit">
           <input type="hidden" name="type" v-model="type" />
           <div class="row g-0 mb-3">
             <div class="col-sm-3 my-auto">
@@ -30,20 +30,21 @@
           <div class="row g-0 mb-3">
             <div class="col-sm-3 my-auto">
               <i class="fas fa-th-large me-1"></i>
-              <label for="category-id" class="">Category</label>
+              <label for="category-id">Category</label>
             </div>
             <div class="col-sm-9">
               <select
                 id="category-id"
-                name="category_id"
                 class="w-100 form-select"
+                ref="category_id"
               >
                 <option
-                  v-for="cat in categories"
+                  v-for="(cat, index) in categories"
                   :key="cat.id"
                   :value="cat.id"
                   :style="{ backgroundColor: cat.icon.color }"
                   class="text-white"
+                  :selected="index == 0"
                 >
                   {{ cat.name }}
                 </option>
@@ -60,9 +61,9 @@
               <input
                 type="text"
                 id="remark"
-                name="remark"
                 class="form-control d-inline-block"
                 placeholder="Write remark"
+                v-model="remark"
               />
               <span class="text-muted">Optional</span>
             </div>
@@ -70,20 +71,32 @@
           <div class="row g-0 mb-3">
             <div class="col-sm-3 my-auto">
               <i class="fas fa-dollar-sign me-1"></i>
-              <label for="amount" class="">Amount</label>
+              <label for="amount">Amount</label>
             </div>
             <div class="col-sm-9">
               <div class="input-group">
                 <input
                   type="number"
                   id="amount"
-                  name="amount"
                   class="form-control d-inline-block"
                   step=".0001"
                   placeholder="Enter Amount"
+                  v-model="v$.amount.$model"
                 />
                 <span class="input-group-text">ks</span>
               </div>
+              <template v-if="v$.amount.$dirty">
+                  <small
+                    class="form-text error"
+                    v-if="v$.amount.required.$invalid"
+                    >Budget Amount is required</small
+                  >
+                  <small
+                    class="form-text error"
+                    v-if="v$.amount.minVal.$invalid"
+                    >Budget Amount must be greater than {{ v$.amount.minVal.$params.min }}</small
+                  >
+                </template>
             </div>
           </div>
           <div class="row g-0 my-3">
@@ -94,6 +107,7 @@
                 :class="`btn rounded mt-3 ${
                   type === 'Income' ? 'btn-primary' : 'btn-danger'
                 }`"
+                :disabled="v$.$invalid"
               >
                 Add
               </button>
@@ -106,12 +120,26 @@
 </template>
 <script>
 import { ref } from "vue";
+import useVuelidate from "@vuelidate/core";
+import { minValue, required } from "@vuelidate/validators";
 
 export default {
   setup() {
     const date = ref(new Date());
     return {
       date,
+      v$: useVuelidate(),
+    };
+  },
+  data() {
+    return {
+      remark: "",
+      amount: "",
+    };
+  },
+  validations() {
+    return {
+      amount: { required, minVal: minValue(0) },
     };
   },
   computed: {
@@ -127,8 +155,16 @@ export default {
       }
     },
   },
-  created() {
-    this.$store.dispatch("fetchCategories", this.type);
+  methods: {
+    onSubmit() {
+      const formData = {
+        date: this.date,
+        category_id: this.$refs.category_id.value,
+        remark: this.remark,
+        amount: this.amount,
+      };
+      console.log(formData);
+    },
   },
 };
 </script>
