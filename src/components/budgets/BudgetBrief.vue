@@ -22,7 +22,7 @@
           monthPicker
           class="d-inline-block ms-3"
           style="width: 150px"
-          @input="changeMonth"
+          @update:modelValue="changeMonth"
         />
 
         <div class="card-body">
@@ -139,7 +139,7 @@
 </template>
 <script>
 import BudgetAddModal from "../partials/BudgetAddModal.vue";
-import { ref } from 'vue';
+import { ref } from "vue";
 
 export default {
   components: {
@@ -147,7 +147,7 @@ export default {
   },
   setup() {
     const d = new Date();
-    const month = ref({ month: d.getMonth(), year: d.getFullYear() })
+    const month = ref({ month: d.getMonth(), year: d.getFullYear() });
     return {
       month,
     };
@@ -160,9 +160,12 @@ export default {
   },
   methods: {
     changeMonth() {
-      console.log('change');
-    }
-  }
+      this.$store.dispatch("fetchMonthlyBrief", {
+        month: this.month.month + 1,
+        year: this.month.year,
+      });
+    },
+  },
 };
 </script>
 <style scoped>

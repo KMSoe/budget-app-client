@@ -22,7 +22,7 @@ export default {
     const month = d.getMonth() + 1;
     const year = d.getFullYear();
     this.$store.dispatch("fetchMonthlyBrief", { month, year });
-    this.$store.dispatch("fetchDailyBudgetCards", { month, year });
+    // this.$store.dispatch("fetchDailyBudgetCards", { month, year });
   },
 };
 </script>

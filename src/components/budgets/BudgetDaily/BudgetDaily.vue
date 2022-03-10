@@ -22,6 +22,9 @@ import Card from './BudgetDailyCard.vue'
 export default {
     components: {
         'daily-card': Card,
+    },
+    props: {
+      
     }
 }
 </script>
