@@ -4,6 +4,7 @@ import store from '../store'
 const state = {
     monthlyBrief: {},
     dailyCards: [],
+    budgets: null,
 }
 
 const mutations = {
@@ -12,13 +13,16 @@ const mutations = {
     },
     'SET_DAILY_CARDS'(state, data) {
         state.dailyCards = data;
-    }
+    },
+    'SET_BUDGET'(state, data) {
+        state.budgets = data;
+    },
 }
 
 const actions = {
-    featchMonthlyBudgets({commit, dispatch}, {month, year}){
-        dispatch('fetchMonthlyBrief', {month, year});
-        dispatch('fetchDailyBudgetCards', {month, year});
+    featchMonthlyBudgets({ commit, dispatch }, { month, year }) {
+        dispatch('fetchMonthlyBrief', { month, year });
+        dispatch('fetchDailyBudgetCards', { month, year });
     },
     fetchMonthlyBrief({ commit }, { month, year }) {
         axiosObj.get('/budgets/brief', {
@@ -58,6 +62,28 @@ const actions = {
                 }
             })
     },
+    storeBudget({ commit }, data) {
+        axiosObj.post('/budgets', {
+
+            date: data.date,
+            type: data.type,
+            category_id: data.category_id,
+            remark: data.remark,
+            amount: data.amount,
+        }, {
+            headers: {
+                Authorization: `Bearer ${store.getters.token}`
+            },
+        })
+            .then(res => {
+                console.log(res)
+            })
+            .catch(err => {
+                if (err.response) {
+                    console.log('err')
+                }
+            })
+    }
 }
 
 const getters = {

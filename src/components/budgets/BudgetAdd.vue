@@ -159,11 +159,12 @@ export default {
     onSubmit() {
       const formData = {
         date: this.date,
+        type: this.type,
         category_id: this.$refs.category_id.value,
         remark: this.remark,
         amount: this.amount,
       };
-      console.log(formData);
+      this.$store.dispatch('storeBudget', formData);
     },
   },
 };
