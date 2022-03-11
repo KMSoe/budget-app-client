@@ -11,7 +11,7 @@ import store from '../store/store'
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-    { name: 'home', path: '/', component: Home, meta: { requiredAuth: true } },
+    { name: 'home', path: '/', component: Home, meta: { requiredAuth: true }, },
     { name: 'budget-add', path: '/budget/add/:type', component: BudgetAdd, meta: { requiredAuth: true } },
     { name: 'profile', path: '/profile', component: Profile, meta: { requiredAuth: true } },
     { name: 'categories', path: '/categories', component: Categories, meta: { requiredAuth: true } },
