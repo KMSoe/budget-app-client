@@ -92,10 +92,10 @@ export default {
     },
   },
   created() {
-    // const d = new Date();
-    // const month = d.getMonth() + 1;
-    // const year = d.getFullYear();
-    // this.$store.dispatch("featchMonthlyBudgets", { month, year });
+    const d = new Date();
+    const month = d.getMonth() + 1;
+    const year = d.getFullYear();
+    this.$store.dispatch("featchMonthlyBudgets", { month, year });
   },
 };
 </script>

@@ -89,7 +89,7 @@ const actions = {
                 if (res.status === 200) {
                     if (type == 'income') {
                         commit('SET_MONTHLY_INCOME_DETAIL', res.data.data.details);
-                    } else if(type == 'expense') {
+                    } else if (type == 'expense') {
                         commit('SET_MONTHLY_EXPENSE_DETAIL', res.data.data.details);
                     }
                 }
@@ -116,6 +116,26 @@ const actions = {
             .then(res => {
                 if (res.status === 201) {
                     router.push({ name: 'home' });
+                }
+            })
+            .catch(err => {
+                if (err.response) {
+                    console.log('err')
+                }
+            })
+    },
+    deleteBudget({ commit, dispatch }, id) {
+        axiosObj.delete(`/budgets/${id}`, {
+            headers: {
+                Authorization: `Bearer ${store.getters.token}`
+            },
+        })
+            .then(res => {
+                if (res.status === 204) {
+                    const d = new Date();
+                    const month = d.getMonth() + 1;
+                    const year = d.getFullYear();
+                    dispatch('featchMonthlyBudgets', { month, year });
                 }
             })
             .catch(err => {

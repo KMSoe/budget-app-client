@@ -7,10 +7,14 @@
     </div>
     <div class="card-body p-0">
       <ul class="mb-0 px-0">
-        <li class="d-flex py-2 px-3" v-for="item in card.items" :key="item.id">
+        <li
+          class="d-flex align-items-center py-2 px-3"
+          v-for="item in card.items"
+          :key="item.id"
+        >
           <i
             :class="`cat-icon me-3 my-auto ${item.class}`"
-            :style="{ backgroundColor: item.color}"
+            :style="{ backgroundColor: item.color }"
           ></i>
           <span class="flex-fill my-auto"
             >{{ item.name }} <br />
@@ -26,9 +30,15 @@
             {{ item.amount }}
           </span>
 
-          <span class="my-auto ms-2" style="width: 40px; height: 40px">
-            <i class="fas fa-times-circle"></i>
-          </span>
+          <div
+            class="ms-2 text-center"
+            style="width: 42px; height: 42px; line-height: 42px"
+          >
+            <i
+              class="fas fa-times-circle d-inline-block mx-auto"
+              @click="deleteBudget(item.id)"
+            ></i>
+          </div>
         </li>
       </ul>
     </div>
@@ -45,6 +55,11 @@ export default {
     card: {
       type: Object,
       required: true,
+    },
+  },
+  methods: {
+    deleteBudget(id) {
+      this.$store.dispatch("deleteBudget", id);
     },
   },
 };
