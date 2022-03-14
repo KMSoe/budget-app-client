@@ -53,10 +53,8 @@ export default {
     this.$store.dispatch("tryAutoLogin");
     this.$store.dispatch("fetchCategories", "Income");
     this.$store.dispatch("fetchCategories", "Expense");
-    const d = new Date();
-    const month = d.getMonth() + 1;
-    const year = d.getFullYear();
-    this.$store.dispatch("featchMonthlyBudgets", { month, year });
+    const d = this.$store.getters.selectedTime;
+    this.$store.dispatch("featchMonthlyBudgets");
   },
 };
 </script>

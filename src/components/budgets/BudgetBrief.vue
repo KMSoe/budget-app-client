@@ -33,16 +33,27 @@
                 {{ brief.net_budget }}
               </span>
 
-              <p class="minus font-weight-bold mt-2" v-if="brief.income == 0">You have No Income.</p>
+              <p class="minus font-weight-bold mt-2" v-if="brief.income == 0">
+                You have No Income.
+              </p>
 
-              <p class="minus font-weight-bold mt-2" v-else-if="brief.net_budget < 0">
+              <p
+                class="minus font-weight-bold mt-2"
+                v-else-if="brief.net_budget < 0"
+              >
                 Your Expense is greater than your Income.
               </p>
 
-              <p class="minus font-weight-bold mt-2" v-else-if="brief.expense == 0">You have No Expense.</p>
+              <p
+                class="minus font-weight-bold mt-2"
+                v-else-if="brief.expense == 0"
+              >
+                You have No Expense.
+              </p>
 
               <p class="minus font-weight-bold mt-2" v-else>
-                You have spent {{ brief.percentage }}% of your Income in February.
+                You have spent {{ brief.percentage }}% of your Income in
+                February.
               </p>
             </div>
             <div class="col-2 add-button">
@@ -109,8 +120,8 @@ export default {
   components: {
     "budget-add-modal": BudgetAddModal,
   },
-  setup() {
-    const d = new Date();
+  data() {
+    const d = this.$store.getters.selectedTime;
     const month = ref({ month: d.getMonth(), year: d.getFullYear() });
     return {
       month,
@@ -122,12 +133,15 @@ export default {
       required: true,
     },
   },
+  computed: {
+    date() {
+      return new Date();
+    }
+  },
   methods: {
     changeMonth() {
-      this.$store.dispatch("featchMonthlyBudgets", {
-        month: this.month.month + 1,
-        year: this.month.year,
-      });
+      this.$store.commit('SET_TIME', new Date(this.month.year, this.month.month, this.date.getDate(), this.date.getHours(), this.date.getMinutes()));
+      this.$store.dispatch("featchMonthlyBudgets");
     },
   },
 };

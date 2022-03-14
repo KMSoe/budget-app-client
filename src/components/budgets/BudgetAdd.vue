@@ -86,17 +86,16 @@
                 <span class="input-group-text">ks</span>
               </div>
               <template v-if="v$.amount.$dirty">
-                  <small
-                    class="form-text error"
-                    v-if="v$.amount.required.$invalid"
-                    >Budget Amount is required</small
-                  >
-                  <small
-                    class="form-text error"
-                    v-if="v$.amount.minVal.$invalid"
-                    >Budget Amount must be greater than {{ v$.amount.minVal.$params.min }}</small
-                  >
-                </template>
+                <small
+                  class="form-text error"
+                  v-if="v$.amount.required.$invalid"
+                  >Budget Amount is required</small
+                >
+                <small class="form-text error" v-if="v$.amount.minVal.$invalid"
+                  >Budget Amount must be greater than
+                  {{ v$.amount.minVal.$params.min }}</small
+                >
+              </template>
             </div>
           </div>
           <div class="row g-0 my-3">
@@ -122,10 +121,11 @@
 import { ref } from "vue";
 import useVuelidate from "@vuelidate/core";
 import { minValue, required } from "@vuelidate/validators";
+import { useStore } from "vuex";
 
 export default {
   setup() {
-    const date = ref(new Date());
+    const date = ref(useStore().getters.selectedTime);
     return {
       date,
       v$: useVuelidate(),
@@ -164,7 +164,7 @@ export default {
         remark: this.remark,
         amount: this.amount,
       };
-      this.$store.dispatch('storeBudget', formData);
+      this.$store.dispatch("storeBudget", formData);
     },
   },
 };

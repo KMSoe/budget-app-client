@@ -92,10 +92,7 @@ export default {
     },
   },
   created() {
-    const d = new Date();
-    const month = d.getMonth() + 1;
-    const year = d.getFullYear();
-    this.$store.dispatch("featchMonthlyBudgets", { month, year });
+    this.$store.dispatch("featchMonthlyBudgets");
   },
 };
 </script>

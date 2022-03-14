@@ -9,9 +9,13 @@ const state = {
     monthlyIncomeDetails: [],
     monthlyExpenseDetails: [],
     monthlyGraphData: {},
+    selectedTime: new Date(),
 }
 
 const mutations = {
+    'SET_TIME'(state, data) {
+        state.selectedTime = data;
+    },
     'SET_MONTHLY_BRIEF'(state, data) {
         state.monthlyBrief = data;
     },
@@ -30,7 +34,10 @@ const mutations = {
 }
 
 const actions = {
-    featchMonthlyBudgets({ commit, dispatch }, { month, year }) {
+    featchMonthlyBudgets({ commit, dispatch }) {
+        const date = state.selectedTime;
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
         dispatch('fetchMonthlyBrief', { month, year });
         dispatch('fetchDailyBudgetCards', { month, year });
         dispatch('featchMonthlyBudgetsDetail', { type: "income", month, year })
@@ -116,7 +123,7 @@ const actions = {
             .then(res => {
                 if (res.status === 201) {
                     router.push({ name: 'home' });
-                }
+                } 
             })
             .catch(err => {
                 if (err.response) {
@@ -132,7 +139,7 @@ const actions = {
         })
             .then(res => {
                 if (res.status === 204) {
-                    const d = new Date();
+                    const d = state.selectedTime;
                     const month = d.getMonth() + 1;
                     const year = d.getFullYear();
                     dispatch('featchMonthlyBudgets', { month, year });
@@ -161,6 +168,9 @@ const getters = {
     },
     monthlyExpenseDetail(state) {
         return state.monthlyExpenseDetails;
+    },
+    selectedTime(state) {
+        return state.selectedTime;
     }
 }
 
