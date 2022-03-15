@@ -88,13 +88,9 @@ export default {
       type: Boolean,
       required: true,
     },
-    user: {
-      type: Object,
-      required: true,
-    },
   },
   computed: {
-    ...mapGetters(["authenticated"]),
+    ...mapGetters(["authenticated", "user"]),
   },
   methods: {
     logout() {

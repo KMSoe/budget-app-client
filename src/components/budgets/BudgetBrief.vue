@@ -53,7 +53,9 @@
 
               <p class="minus font-weight-bold mt-2" v-else>
                 You have spent {{ brief.percentage }}% of your Income in
-                February.
+                <b
+                  ><em>{{ brief.month }}</em></b
+                >.
               </p>
             </div>
             <div class="col-2 add-button">
@@ -136,11 +138,20 @@ export default {
   computed: {
     date() {
       return new Date();
-    }
+    },
   },
   methods: {
     changeMonth() {
-      this.$store.commit('SET_TIME', new Date(this.month.year, this.month.month, this.date.getDate(), this.date.getHours(), this.date.getMinutes()));
+      this.$store.commit(
+        "SET_TIME",
+        new Date(
+          this.month.year,
+          this.month.month,
+          this.date.getDate(),
+          this.date.getHours(),
+          this.date.getMinutes()
+        )
+      );
       this.$store.dispatch("featchMonthlyBudgets");
     },
   },

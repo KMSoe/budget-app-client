@@ -32,7 +32,7 @@ router.beforeEach((to, from, next) => {
     else {
       next();
     }
-  }, 1000);
+  }, 500);
 
 })
 export default router;

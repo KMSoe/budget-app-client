@@ -2,31 +2,39 @@
   <aside :class="sidebarType">
     <div class="side-inner">
       <div class="profile mx-auto text-center d-flex flex-column py-2">
-        <img src="/src/assets/kms.jpg" alt="Kaung Myat" class="img-fluid" />
-        <h3 class="name mb-1">Kaung Myat</h3>
-        <span class="email text-muted mb-1">kaungmyatsoe.m192@gmail.com</span>
+        <img src="/src/assets/kms.jpg" :alt="user.name" class="img-fluid" />
+        <h3 class="name mb-1">{{ user.name }}</h3>
+        <span class="email text-muted mb-1">{{ user.email }}</span>
         <!-- <a href="#" class="align-self-center btn btn-primary mt-2">Profile</a> -->
       </div>
 
       <div class="nav-menu">
         <ul>
           <li>
-            <router-link :to="{name: 'home'}" :active-class="isPlus ? 'active plus' : 'active minus'"
+            <router-link
+              :to="{ name: 'home' }"
+              :active-class="isPlus ? 'active plus' : 'active minus'"
               ><i class="fas fa-home me-2"></i>Dashboard</router-link
             >
           </li>
           <li>
-            <router-link :to="{name: 'profile'}" :active-class="isPlus ? 'active plus' : 'active minus'"
+            <router-link
+              :to="{ name: 'profile' }"
+              :active-class="isPlus ? 'active plus' : 'active minus'"
               ><i class="fas fa-user me-2"></i>Profile</router-link
             >
           </li>
           <li>
-            <router-link :to="{name: 'categories'}" :active-class="isPlus ? 'active plus' : 'active minus'"
+            <router-link
+              :to="{ name: 'categories' }"
+              :active-class="isPlus ? 'active plus' : 'active minus'"
               ><i class="fas fa-th-large me-2"></i>Categories</router-link
             >
           </li>
           <li>
-            <router-link :to="{name: 'statistics'}" :active-class="isPlus ? 'active plus' : 'active minus'"
+            <router-link
+              :to="{ name: 'statistics' }"
+              :active-class="isPlus ? 'active plus' : 'active minus'"
               ><i class="fas fa-chart-line me-2"></i>Statistics</router-link
             >
           </li>
@@ -41,6 +49,8 @@
   </aside>
 </template>
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   props: {
     sidebarType: {
@@ -51,6 +61,9 @@ export default {
       type: Boolean,
       required: true,
     },
+  },
+  computed: {
+    ...mapGetters(["user"]),
   },
   methods: {
     logout() {
@@ -180,10 +193,10 @@ aside .side-inner .nav-menu ul li a.active {
   background: #fcfcfc;
   color: #000;
 }
-aside .side-inner .nav-menu ul li a.active.plus:before{
+aside .side-inner .nav-menu ul li a.active.plus:before {
   background-color: var(--plus-color);
 }
-aside .side-inner .nav-menu ul li a.active.minus:before{
+aside .side-inner .nav-menu ul li a.active.minus:before {
   background-color: var(--minus-color);
 }
 aside .side-inner .nav-menu ul li a.active:before {

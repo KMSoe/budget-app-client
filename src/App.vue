@@ -3,12 +3,11 @@
     <sidebar
       v-if="authenticated"
       sidebar-type="mobile-sidebar"
-      :user="user"
       :is-plus="isPlus"
     >
     </sidebar>
 
-    <app-header :user="user" :is-plus="isPlus"></app-header>
+    <app-header :is-plus="isPlus"></app-header>
 
     <div class="site-section">
       <div class="container-fluid">
@@ -16,7 +15,6 @@
           <div class="col-lg-3 d-none d-lg-block" v-if="authenticated">
             <sidebar
               sidebar-type="desktop-sidebar"
-              :user="user"
               :is-plus="isPlus"
             >
             </sidebar>
@@ -54,7 +52,6 @@ export default {
   computed: {
     ...mapGetters({
       authenticated: "authenticated",
-      user: "user",
       isPlus: "isPlus",
     }),
   },
