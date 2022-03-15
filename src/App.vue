@@ -60,12 +60,13 @@ export default {
   },
   created() {
     this.$store.dispatch("tryAutoLogin");
-    if (this.authenticated) {
-      this.$store.dispatch("fetchCategories", "Income");
-      this.$store.dispatch("fetchCategories", "Expense");
-      const d = this.$store.getters.selectedTime;
-      this.$store.dispatch("featchMonthlyBudgets");
-    }
+    setTimeout(() => {
+      if (this.authenticated) {
+        this.$store.dispatch("fetchCategories", "Income");
+        this.$store.dispatch("fetchCategories", "Expense");
+        this.$store.dispatch("featchMonthlyBudgets");
+      }
+    }, 1000);
   },
 };
 </script>

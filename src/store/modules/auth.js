@@ -4,7 +4,7 @@ import router from '../../router/index'
 const state = {
     token: null,
     userId: null,
-    user: {name: 'Kaung Myat'},
+    user: { name: 'Kaung Myat' },
     authenticated: false,
     authErrors: null,
 }
@@ -92,22 +92,45 @@ const actions = {
                 }
             })
     },
-    tryAutoLogin({ commit }) {
+    tryAutoLogin({ commit, dispatch }) {
         const token = localStorage.getItem('token');
         if (!token) {
             return
         }
-        const expirationDate = localStorage.getItem('expirationDate');
-        const now = new Date();
+        axiosObj.get('/user', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+            .then(res => {
+                if (res.status === 200) {
+                    const user = res.data.data.user;
 
-        if (now >= expirationDate) {
-            return
-        }
+                    const expirationDate = localStorage.getItem('expirationDate');
+                    const now = new Date();
 
-        const userId = localStorage.getItem('userId')
-        commit('AUTH_USER', { id: userId, token });
-        // commit('SET_USER', res.data.data.user);
-        commit('SET_AUTH', true);
+                    if (now >= expirationDate) {
+                        return
+                    }
+
+                    localStorage.setItem('token', token);
+                    localStorage.setItem('userId', user.id);
+                    commit('AUTH_USER', { id: user.id, token });
+                    commit('SET_USER', user);
+                    commit('SET_AUTH', true);
+                    // router.push({name: 'home'});
+                }
+            })
+            .catch(err => {
+                if (err.response.status === 401) {
+                    commit('CLEAR_AUTH');
+                    localStorage.removeItem('expirationDate');
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('userId');
+                    router.push({ name: 'signin' });
+                }
+            })
+
     },
     logout({ commit }) {
         axiosObj.post('/logout', {
