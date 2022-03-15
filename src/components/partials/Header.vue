@@ -40,7 +40,7 @@
               />
               <span
                 class="username text-white px-2 py-2 d-none d-lg-inline-block"
-                >Hlaine Hlaine</span
+                >{{ user.name }}</span
               >
             </a>
 
@@ -86,6 +86,10 @@ export default {
   props: {
     isPlus: {
       type: Boolean,
+      required: true,
+    },
+    user: {
+      type: Object,
       required: true,
     },
   },

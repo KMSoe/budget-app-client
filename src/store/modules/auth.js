@@ -4,7 +4,7 @@ import router from '../../router/index'
 const state = {
     token: null,
     userId: null,
-    user: null,
+    user: {name: 'Kaung Myat'},
     authenticated: false,
     authErrors: null,
 }

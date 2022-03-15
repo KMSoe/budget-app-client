@@ -41,7 +41,7 @@
           </li>
         </ul>
       </template>
-      <p class="text-center mx-auto" v-else>You have No Income.</p>
+      <p class="text-center mx-auto" v-else>You have No {{ type }}.</p>
     </div>
   </div>
 </template>

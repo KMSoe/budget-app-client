@@ -43,19 +43,31 @@
       </ul>
     </div>
     <div class="card-footer">
-      <p class="mb-0" style="letter-spacing: 1px">
+      <p
+        class="mb-0"
+        style="letter-spacing: 1px"
+        v-if="brief.income == 0"
+      >
+        You have No Income in this month.
+      </p>
+      <p class="mb-0" style="letter-spacing: 1px" v-else>
         {{ card.percentage }}% of your monthly Income was spent.
       </p>
     </div>
   </div>
 </template>
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   props: {
     card: {
       type: Object,
       required: true,
     },
+  },
+  computed: {
+    ...mapGetters({ brief: "monthlyBrief" }),
   },
   methods: {
     deleteBudget(id) {

@@ -3,17 +3,22 @@
     <sidebar
       v-if="authenticated"
       sidebar-type="mobile-sidebar"
+      :user="user"
       :is-plus="isPlus"
     >
     </sidebar>
 
-    <app-header :is-plus="isPlus"></app-header>
+    <app-header :user="user" :is-plus="isPlus"></app-header>
 
     <div class="site-section">
       <div class="container-fluid">
         <div class="row">
           <div class="col-lg-3 d-none d-lg-block" v-if="authenticated">
-            <sidebar sidebar-type="desktop-sidebar" :is-plus="isPlus">
+            <sidebar
+              sidebar-type="desktop-sidebar"
+              :user="user"
+              :is-plus="isPlus"
+            >
             </sidebar>
           </div>
           <div
@@ -47,14 +52,20 @@ export default {
     };
   },
   computed: {
-    ...mapGetters({ authenticated: "authenticated", isPlus: "isPlus" }),
+    ...mapGetters({
+      authenticated: "authenticated",
+      user: "user",
+      isPlus: "isPlus",
+    }),
   },
   created() {
     this.$store.dispatch("tryAutoLogin");
-    this.$store.dispatch("fetchCategories", "Income");
-    this.$store.dispatch("fetchCategories", "Expense");
-    const d = this.$store.getters.selectedTime;
-    this.$store.dispatch("featchMonthlyBudgets");
+    if (this.authenticated) {
+      this.$store.dispatch("fetchCategories", "Income");
+      this.$store.dispatch("fetchCategories", "Expense");
+      const d = this.$store.getters.selectedTime;
+      this.$store.dispatch("featchMonthlyBudgets");
+    }
   },
 };
 </script>
