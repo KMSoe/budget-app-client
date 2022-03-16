@@ -18,7 +18,7 @@
             :disabled="activeCategoryView == 'income'"
             @click="swapCategoryView('income')"
           >
-            <i class="fas fa-check me-2"></i>Income
+            <i class="fas fa-check me-2" v-if="activeCategoryView == 'income'"></i>Income
           </a>
           <a
             class="expense-nav btn btn-secondary me-2 select-btn"
@@ -27,7 +27,7 @@
             :disabled="activeCategoryView == 'expense'"
             @click="swapCategoryView('expense')"
           >
-            <i class="fas fa-check me-2"></i>Expense
+            <i class="fas fa-check me-2" v-if="activeCategoryView == 'expense'"></i>Expense
           </a>
         </div>
         <div class="row mt-5">
@@ -65,7 +65,6 @@
 <script>
 import { mapGetters } from "vuex";
 import CategoryList from "./CategoryList.vue";
-import $ from "jquery";
 
 export default {
   components: {
@@ -86,13 +85,8 @@ export default {
     },
   },
   methods: {
-    swapCategoryView(category) {
-      this.activeCategoryView = category;
-      // if(category == 'income') {
-      //   $('#income-categories-container').toggleClass('show');
-      // }else if(category == 'expense') {
-      //   $('#expense-categories-container').toggleClass('show');
-      // }
+    swapCategoryView(type) {
+      this.activeCategoryView = type;
     },
   },
 };

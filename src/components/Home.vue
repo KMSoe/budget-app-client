@@ -16,18 +16,18 @@
                 <button
                   class="btn btn-secondary me-2 select-btn income-nav"
                   :class="{ active: activeDetail == 'income' }"
-                  @click="swapBudgetDetail"
+                  @click="swapBudgetDetail('income')"
                   :disabled="activeDetail == 'income'"
                 >
-                  <i class="fas fa-check me-2"></i>Income
+                  <i class="fas fa-check me-2" v-if="activeDetail == 'income'"></i>Income
                 </button>
                 <button
                   class="btn btn-secondary select-btn expense-nav"
                   :class="{ active: activeDetail == 'expense' }"
-                  @click="swapBudgetDetail"
+                  @click="swapBudgetDetail('expense')"
                   :disabled="activeDetail == 'expense'"
                 >
-                  <i class="fas fa-check me-2"></i>Expense
+                  <i class="fas fa-check me-2" v-if="activeDetail == 'expense'"></i>Expense
                 </button>
               </div>
             </div>
@@ -35,6 +35,7 @@
               :active="activeDetail"
               :total="total"
               :items="details"
+              :chart-data="chartData"
             ></budget-detail>
           </div>
         </div>
@@ -66,6 +67,8 @@ export default {
       cards: "dailyCards",
       incomeDetails: "monthlyIncomeDetail",
       expenseDetails: "monthlyExpenseDetail",
+      incomeChart: "monthlyIncomeGraph",
+      expenseChart: "monthlyExpenseGraph",
     }),
     total() {
       if (this.activeDetail == "income") {
@@ -81,14 +84,35 @@ export default {
         return this.expenseDetails;
       }
     },
+    chartData() {
+      let labels = [];
+      let data = [];
+      let colors = [];
+  
+      if (this.activeDetail == "income") {
+        labels = this.incomeChart.names;
+        data = this.incomeChart.percentages;
+        colors = this.incomeChart.colors;
+      } else if (this.activeDetail == "expense") {
+        labels = this.expenseChart.names;
+        data = this.expenseChart.percentages;
+        colors = this.expenseChart.colors;
+      }
+
+      return {
+        labels: labels,
+        datasets: [
+          {
+            data: data,
+            backgroundColor: colors,
+          },
+        ],
+      };
+    },
   },
   methods: {
-    swapBudgetDetail() {
-      if (this.activeDetail === "income") {
-        this.activeDetail = "expense";
-      } else {
-        this.activeDetail = "income";
-      }
+    swapBudgetDetail(type) {
+      this.activeDetail = type;
     },
   },
   created() {

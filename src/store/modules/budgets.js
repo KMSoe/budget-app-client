@@ -8,7 +8,8 @@ const state = {
     budgets: null,
     monthlyIncomeDetails: [],
     monthlyExpenseDetails: [],
-    monthlyGraphData: {},
+    monthlyIncomeGraphData: {},
+    monthlyExpenseGraphData: {},
     selectedTime: new Date(),
 }
 
@@ -30,6 +31,12 @@ const mutations = {
     },
     'SET_MONTHLY_EXPENSE_DETAIL'(state, data) {
         state.monthlyExpenseDetails = data;
+    },
+    'SET_MONTHLY_INCOME_GRAPH'(state, data) {
+        state.monthlyIncomeGraphData = data;
+    },
+    'SET_MONTHLY_EXPENSE_GRAPH'(state, data) {
+        state.monthlyExpenseGraphData = data;
     },
 }
 
@@ -96,8 +103,10 @@ const actions = {
                 if (res.status === 200) {
                     if (type == 'income') {
                         commit('SET_MONTHLY_INCOME_DETAIL', res.data.data.details);
+                        commit('SET_MONTHLY_INCOME_GRAPH', res.data.data.graph_data);
                     } else if (type == 'expense') {
                         commit('SET_MONTHLY_EXPENSE_DETAIL', res.data.data.details);
+                        commit('SET_MONTHLY_EXPENSE_GRAPH', res.data.data.graph_data);
                     }
                 }
             })
@@ -123,7 +132,7 @@ const actions = {
             .then(res => {
                 if (res.status === 201) {
                     router.push({ name: 'home' });
-                } 
+                }
             })
             .catch(err => {
                 if (err.response) {
@@ -168,6 +177,12 @@ const getters = {
     },
     monthlyExpenseDetail(state) {
         return state.monthlyExpenseDetails;
+    },
+    monthlyIncomeGraph(state) {
+        return state.monthlyIncomeGraphData;
+    },
+    monthlyExpenseGraph(state) {
+        return state.monthlyExpenseGraphData;
     },
     selectedTime(state) {
         return state.selectedTime;

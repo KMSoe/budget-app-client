@@ -7,7 +7,7 @@
       class="income-expense-pie-container position-relative mx-auto ms-md-auto"
       id="pie-small"
     >
-      <canvas id="income-category-pie"></canvas>
+      <PieChart :chart-data="chartData" />
     </div>
     <div class="mt-4">
       <template v-if="total > 0">
@@ -46,10 +46,22 @@
   </div>
 </template>
 <script>
+import { PieChart } from "vue-chart-3";
+import { Chart, registerables } from "chart.js";
+
+Chart.register(...registerables);
+
 export default {
+  components: {
+    PieChart,
+  },
   props: {
     active: {
       type: String,
+      required: true,
+    },
+    chartData: {
+      type: Object,
       required: true,
     },
     total: {
