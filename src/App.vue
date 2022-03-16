@@ -76,11 +76,13 @@ export default {
   --bg-color: #fefefe;
   --text-color: #111;
   --bg-breadcrumb: #e7e7e7;
+  --border-color: #ccc;
 }
 .dark {
   --bg-color: #1a252f;
   --text-color: #eee;
   --bg-breadcrumb: #3f3f3f;
+  --border-color: #3f3f3f;
 }
 body {
   font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
@@ -105,16 +107,16 @@ a:hover {
   text-align: center;
 }
 .bg-plus {
-  background-color: var(--plus-color);
+  background-color: var(--plus-color) !important;
 }
 .bg-minus {
-  background-color: var(--minus-color);
+  background-color: var(--minus-color) !important;
 }
 .plus {
-  color: var(--plus-color);
+  color: var(--plus-color) !important;
 }
 .minus {
-  color: var(--minus-color);
+  color: var(--minus-color) !important;
 }
 .site-section {
   padding-top: 80px;

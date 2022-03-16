@@ -92,6 +92,8 @@ export default {
     },
   },
   created() {
+    this.$store.dispatch("fetchCategories", "Income");
+    this.$store.dispatch("fetchCategories", "Expense");
     this.$store.dispatch("featchMonthlyBudgets");
   },
 };
