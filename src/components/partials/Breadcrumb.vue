@@ -46,7 +46,7 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style>
 .breadcrumb {
   background-color: var(--bg-breadcrumb);
 }
