@@ -7,6 +7,7 @@
     "preview": "vite preview --port 5050"
   },
   "dependencies": {
+    "@mathieustan/vue-datepicker": "^0.2.11",
     "@popperjs/core": "^2.11.2",
     "@vuelidate/core": "^2.0.0-alpha.34",
     "@vuelidate/validators": "^2.0.0-alpha.26",
@@ -16,6 +17,8 @@
     "jQuery": "^1.7.4",
     "jquery": "^1.12.4",
     "jquery-ui": "^1.13.1",
+    "primeicons": "^5.0.0",
+    "primevue": "^3.12.2",
     "vue": "^3.2.29",
     "vue-chart-3": "^3.1.4",
     "vue-router": "^4.0.13",

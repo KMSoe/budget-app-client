@@ -8,7 +8,7 @@ const state = {
     yearlyExpenseDetails: [],
     yearlyIncomeGraphData: {},
     yearlyExpenseGraphData: {},
-    selectedYear: new Date().getFullYear(),
+    selectedYear: new Date(),
 }
 
 const mutations = {
