@@ -17,7 +17,7 @@ const router = createRouter({
     { name: 'categories-add', path: '/categories/add/:type', component: CategoryAdd, meta: { requiredAuth: true } },
     { name: 'profile', path: '/profile', component: Profile, meta: { requiredAuth: true } },
     { name: 'categories', path: '/categories', component: Categories, meta: { requiredAuth: true } },
-    { name: 'statistics', path: '/statistics', component: Statistics, meta: { requiredAuth: true } },
+    { name: 'statistics', path: '/statistics/:year?', component: Statistics, meta: { requiredAuth: true } },
     { name: 'register', path: '/register', component: Register, meta: { requiredAuth: false } },
     { name: 'signin', path: '/signin', component: Signin, meta: { requiredAuth: false } },
   ]

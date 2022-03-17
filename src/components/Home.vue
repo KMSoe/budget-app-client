@@ -19,7 +19,11 @@
                   @click="swapBudgetDetail('income')"
                   :disabled="activeDetail == 'income'"
                 >
-                  <i class="fas fa-check me-2" v-if="activeDetail == 'income'"></i>Income
+                  <i
+                    class="fas fa-check me-2"
+                    v-if="activeDetail == 'income'"
+                  ></i
+                  >Income
                 </button>
                 <button
                   class="btn btn-secondary select-btn expense-nav"
@@ -27,7 +31,11 @@
                   @click="swapBudgetDetail('expense')"
                   :disabled="activeDetail == 'expense'"
                 >
-                  <i class="fas fa-check me-2" v-if="activeDetail == 'expense'"></i>Expense
+                  <i
+                    class="fas fa-check me-2"
+                    v-if="activeDetail == 'expense'"
+                  ></i
+                  >Expense
                 </button>
               </div>
             </div>
@@ -35,7 +43,7 @@
               :active="activeDetail"
               :total="total"
               :items="details"
-              :chart-data="chartData"
+              :graph-data="chartData"
             ></budget-detail>
           </div>
         </div>
@@ -85,29 +93,11 @@ export default {
       }
     },
     chartData() {
-      let labels = [];
-      let data = [];
-      let colors = [];
-  
       if (this.activeDetail == "income") {
-        labels = this.incomeChart.names;
-        data = this.incomeChart.percentages;
-        colors = this.incomeChart.colors;
+        return this.incomeChart;
       } else if (this.activeDetail == "expense") {
-        labels = this.expenseChart.names;
-        data = this.expenseChart.percentages;
-        colors = this.expenseChart.colors;
+        return this.expenseChart;
       }
-
-      return {
-        labels: labels,
-        datasets: [
-          {
-            data: data,
-            backgroundColor: colors,
-          },
-        ],
-      };
     },
   },
   methods: {

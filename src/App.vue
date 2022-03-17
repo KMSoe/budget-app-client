@@ -13,10 +13,7 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-lg-3 d-none d-lg-block" v-if="authenticated">
-            <sidebar
-              sidebar-type="desktop-sidebar"
-              :is-plus="isPlus"
-            >
+            <sidebar sidebar-type="desktop-sidebar" :is-plus="isPlus">
             </sidebar>
           </div>
           <div

@@ -10,7 +10,7 @@
       <PieChart :chart-data="chartData" />
     </div>
     <div class="mt-4">
-      <template v-if="total > 0">
+      <template v-if="Math.abs(total) > 0">
         <p class="text-center mx-auto">
           Total {{ type }}:
           {{ total }}
@@ -60,7 +60,7 @@ export default {
       type: String,
       required: true,
     },
-    chartData: {
+    graphData: {
       type: Object,
       required: true,
     },
@@ -76,6 +76,17 @@ export default {
   computed: {
     type() {
       return `${this.active.charAt(0).toUpperCase()}${this.active.slice(1)}`;
+    },
+    chartData() {;
+      return {
+        labels: this.graphData.names,
+        datasets: [
+          {
+            data: this.graphData.percentages,
+            backgroundColor: this.graphData.colors,
+          },
+        ],
+      };
     },
   },
 };

@@ -4,6 +4,7 @@ import router from '../../router/index'
 
 const state = {
     yearlyBrief: {},
+    yearlyTable: [],
     yearlyIncomeDetails: [],
     yearlyExpenseDetails: [],
     yearlyIncomeGraphData: {},
@@ -17,6 +18,9 @@ const mutations = {
     },
     'SET_YEARLY_BRIEF'(state, data) {
         state.yearlyBrief = data;
+    },
+    'SET_YEARLY_TABLE'(state, data) {
+        state.yearlyTable = data;
     },
     'SET_YEARLY_INCOME_DETAIL'(state, data) {
         state.yearlyIncomeDetails = data;
@@ -33,12 +37,40 @@ const mutations = {
 }
 
 const actions = {
-    
+    fetchStatisticsData({ commit }) {
+        axiosObj.get('/statistics', {
+            headers: {
+                Authorization: `Bearer ${store.getters.token}`
+            },
+            params: {
+                year: state.selectedYear.getFullYear()
+            }
+        })
+            .then(res => {
+                if (res.status === 200) {
+                    const data = res.data;
+                    commit('SET_YEARLY_BRIEF', data.yearly_result_table.brief);
+                    commit('SET_YEARLY_TABLE', data.yearly_result_table.monthlyResults);
+                    commit('SET_YEARLY_INCOME_DETAIL', data.income_details);
+                    commit('SET_YEARLY_EXPENSE_DETAIL', data.expense_details);
+                    commit('SET_YEARLY_INCOME_GRAPH', data.income_graph_data);
+                    commit('SET_YEARLY_EXPENSE_GRAPH', data.expense_graph_data);
+                }
+            })
+            .catch(err => {
+                if (err.response) {
+                    console.log('err')
+                }
+            })
+    }
 }
 
 const getters = {
     yearlyBrief(state) {
-        return state.monthlyBrief;
+        return state.yearlyBrief;
+    },
+    yearlyTable(state) {
+        return state.yearlyTable;
     },
     yearlyIncomeDetail(state) {
         return state.yearlyIncomeDetails;
