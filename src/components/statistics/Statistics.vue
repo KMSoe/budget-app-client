@@ -41,11 +41,12 @@
 <script>
 import Calendar from "primevue/calendar";
 import BudgetTable from "../budgets/BudgetYearlyTable.vue";
-import StatisticsDetail from './StatisticsDetail.vue';
+import StatisticsDetail from "./StatisticsDetail.vue";
 import ProgressBar from "./ProgressBar.vue";
 import { mapGetters, useStore } from "vuex";
 import { LineChart } from "vue-chart-3";
 import { Chart, registerables } from "chart.js";
+import store from "../../store/store";
 
 Chart.register(...registerables);
 
@@ -55,11 +56,11 @@ export default {
     LineChart,
     "budget-table": BudgetTable,
     ProgressBar,
-    StatisticsDetail
+    StatisticsDetail,
   },
   data() {
     return {
-      year: this.selectedYear,
+      year: null,
     };
   },
   computed: {
@@ -79,30 +80,35 @@ export default {
     chartData() {
       return {
         labels: ["", ...this.lineGraphData.months],
-        datasets: [{
-                label: "Income",
-                backgroundColor: "#08fa08",
-                borderColor: "#08fa08",
-                data: [0, ...this.lineGraphData.incomes],
-            },
-            {
-                label: "Expense",
-                backgroundColor: "#fa0808",
-                borderColor: "#fa0808",
-                data: [0, ...this.lineGraphData.expenses],
-            },
-        ]
-    };
-    }
+        datasets: [
+          {
+            label: "Income",
+            backgroundColor: "#08fa08",
+            borderColor: "#08fa08",
+            data: [0, ...this.lineGraphData.incomes],
+          },
+          {
+            label: "Expense",
+            backgroundColor: "#fa0808",
+            borderColor: "#fa0808",
+            data: [0, ...this.lineGraphData.expenses],
+          },
+        ],
+      };
+    },
   },
   watch: {
     year(newVal, oldVal) {
       this.$store.commit("SET_YEAR", newVal);
+      this.$store.dispatch("fetchStatisticsData");
     },
   },
   created() {
-    this.$store.dispatch("fetchStatisticsData");
     this.year = this.$store.getters.selectedYear;
+  },
+  beforeRouteEnter(to, from, next) {
+    store.dispatch("fetchStatisticsData");
+    setTimeout(() => next(true), 500);
   },
 };
 </script>

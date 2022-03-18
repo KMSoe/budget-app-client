@@ -29,7 +29,7 @@
           <div class="col-12 col-md-6 mx-auto" id="income-details-container" :class="{show: activeDetail == 'income'}">
             <BudgetDetail
               active="income"
-              :total="brief.income ?? 0"
+              :total="brief.income"
               :items="incomeDetails"
               :graph-data="incomeChart"
             />
@@ -37,7 +37,7 @@
           <div class="col-12 col-md-6 mx-auto" id="expense-details-container" :class="{show: activeDetail == 'expense'}">
             <BudgetDetail
               active="expense"
-              :total="brief.expense ?? 0"
+              :total="brief.expense"
               :items="expenseDetails"
               :graph-data="expenseChart"
             />
