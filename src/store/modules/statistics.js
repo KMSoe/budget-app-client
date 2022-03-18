@@ -4,6 +4,7 @@ import router from '../../router/index'
 
 const state = {
     yearlyBrief: {},
+    yearlyLineGraphData: {},
     yearlyTable: [],
     yearlyIncomeDetails: [],
     yearlyExpenseDetails: [],
@@ -15,6 +16,9 @@ const state = {
 const mutations = {
     'SET_YEAR'(state, data) {
         state.selectedYear = data;
+    },
+    'SET_LINE_GRAPH_DATA'(state, data) {
+        state.yearlyLineGraphData = data;
     },
     'SET_YEARLY_BRIEF'(state, data) {
         state.yearlyBrief = data;
@@ -86,6 +90,25 @@ const getters = {
     },
     selectedYear(state) {
         return state.selectedYear;
+    },
+    yearlyLineGraphData(state) {
+        let months = [];
+        let incomes = [];
+        let expenses = [];
+
+        if(state.yearlyTable.length) {
+            state.yearlyTable.forEach(e => {
+                months.push(e.month);
+                incomes.push(e.income);
+                expenses.push(Math.abs(e.expense));
+            });
+        }
+
+        return {
+            months,
+            incomes,
+            expenses
+        }
     }
 }
 

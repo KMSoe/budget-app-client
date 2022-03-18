@@ -22,7 +22,7 @@
         </a>
         <Calendar v-model="year" dateFormat="yy" view="year" id="yearpicker" />
         <h3 class="my-4">Monthly Financial Graph</h3>
-        <canvas id="income-expense-multi-line" style="height: 300px"></canvas>
+        <LineChart class="pie mx-auto" :chart-data="chartData" />
       </div>
       <div class="row py-3">
         <div class="col-12 col-xl-6 mb-5">
@@ -44,10 +44,15 @@ import BudgetTable from "../budgets/BudgetYearlyTable.vue";
 import StatisticsDetail from './StatisticsDetail.vue';
 import ProgressBar from "./ProgressBar.vue";
 import { mapGetters, useStore } from "vuex";
+import { LineChart } from "vue-chart-3";
+import { Chart, registerables } from "chart.js";
+
+Chart.register(...registerables);
 
 export default {
   components: {
     Calendar,
+    LineChart,
     "budget-table": BudgetTable,
     ProgressBar,
     StatisticsDetail
@@ -63,6 +68,7 @@ export default {
       table: "yearlyTable",
       incomeDetails: "yearlyIncomeDetail",
       expenseDetails: "yearlyExpenseDetail",
+      lineGraphData: "yearlyLineGraphData",
     }),
     yearNumber() {
       return this.year.getFullYear();
@@ -70,6 +76,24 @@ export default {
     date() {
       return new Date();
     },
+    chartData() {
+      return {
+        labels: ["", ...this.lineGraphData.months],
+        datasets: [{
+                label: "Income",
+                backgroundColor: "#08fa08",
+                borderColor: "#08fa08",
+                data: [0, ...this.lineGraphData.incomes],
+            },
+            {
+                label: "Expense",
+                backgroundColor: "#fa0808",
+                borderColor: "#fa0808",
+                data: [0, ...this.lineGraphData.expenses],
+            },
+        ]
+    };
+    }
   },
   watch: {
     year(newVal, oldVal) {

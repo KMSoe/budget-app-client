@@ -1,14 +1,11 @@
 <template>
-  <div class="income-category-pie-container mt-5">
+  <div class="mt-5">
     <h5 class="mb-4 text-center text-md-start">
       {{ type }} amount on Category
     </h5>
-    <div
-      class="income-expense-pie-container position-relative mx-auto ms-md-auto"
-      id="pie-small"
-    >
-      <PieChart :chart-data="chartData" />
-    </div>
+
+    <PieChart class="pie mx-auto" :chart-data="chartData" />
+
     <div class="mt-4">
       <template v-if="Math.abs(total) > 0">
         <p class="text-center mx-auto">
@@ -77,7 +74,7 @@ export default {
     type() {
       return `${this.active.charAt(0).toUpperCase()}${this.active.slice(1)}`;
     },
-    chartData() {;
+    chartData() {
       return {
         labels: this.graphData.names,
         datasets: [
@@ -91,5 +88,9 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped>
+.pie {
+  width: 75% !important;
+  height: auto;
+}
 </style>
