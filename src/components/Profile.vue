@@ -6,6 +6,7 @@
       icon-class="fas fa-user"
       currentPage="Profile"
     ></Breadcrumb>
+
     <section class="yearly-balance-section my-5">
       <div class="container">
         <div class="col-lg-8 mx-auto">
@@ -27,7 +28,13 @@
               :yearly-brief="yearlyResult.brief"
               :monthly-results="yearlyResult.monthlyResults"
             ></budget-table>
-            <a href="/" class="btn btn-primary text-white rounded">See Detail</a>
+            <a
+              href="/"
+              role="button"
+              @click.prevent="seeDetail(yearlyResult.brief.year)"
+              class="btn btn-primary text-white rounded"
+              >See Detail</a
+            >
           </article>
         </div>
       </div>
@@ -44,6 +51,15 @@ export default {
   },
   computed: {
     ...mapGetters({ results: "profileResults" }),
+    date() {
+      return new Date();
+    }
+  },
+  methods: {
+    seeDetail(year) {
+      this.$store.commit("SET_YEAR", new Date(year, this.date.getMonth(), this.date.getDate()));
+      this.$router.push({ name: "statistics" });
+    },
   },
   created() {
     this.$store.dispatch("loadProfile");
