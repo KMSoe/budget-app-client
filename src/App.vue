@@ -17,13 +17,14 @@
             </sidebar>
           </div>
           <div
-            :class="[authenticated ? 'col-lg-9 mx-auto' : 'col-lg-9 mx-auto']"
+            class="col-lg-9 mx-auto"
           >
             <router-view v-slot="{ Component }">
               <transition name="slide" mode="out-in">
                 <component :is="Component" />
               </transition>
             </router-view>
+            <Footer />
           </div>
         </div>
       </div>
@@ -34,12 +35,14 @@
 <script>
 import Header from "./components/partials/Header.vue";
 import Sidebar from "./components/partials/Sidebar.vue";
+import Footer from "./components/partials/Footer.vue";
 import { mapGetters } from "vuex";
 
 export default {
   components: {
     "app-header": Header,
     sidebar: Sidebar,
+    Footer,
   },
   data() {
     return {

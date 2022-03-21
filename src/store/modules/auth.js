@@ -168,6 +168,9 @@ const getters = {
     user(state) {
         return state.user;
     },
+    isAdmin(state) {
+        return state.user.userRole == 'admin';
+    },
     authenticated(state) {
         return state.authenticated;
     },

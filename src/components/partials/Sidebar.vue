@@ -38,6 +38,13 @@
               ><i class="fas fa-chart-line me-2"></i>Statistics</router-link
             >
           </li>
+          <li v-if="isAdmin">
+            <router-link
+              :to="{ name: 'icons' }"
+              :active-class="isPlus ? 'active plus' : 'active minus'"
+              ><i class="fas fa-icons me-2"></i>Icons</router-link
+            >
+          </li>
           <li>
             <a href="#" role="button" @click="logout"
               ><i class="fas fa-sign-out-alt me-2"></i>Sign out</a
@@ -63,7 +70,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["user"]),
+    ...mapGetters(["user", "isAdmin"]),
   },
   methods: {
     logout() {

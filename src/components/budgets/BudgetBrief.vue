@@ -5,25 +5,27 @@
         class="col-sm-10 col-md-8 col-lg-10 col-xl-8 mb-3"
         style="background-color: unset"
       >
-        <a
-          href="#"
-          role="button"
-          class="btn bg-primary text-white py-1 px-3 my-2"
-          id="pick-month-btn"
-          style="border-radius: 12px"
-        >
-          <i class="fas fa-calendar-alt me-2"></i>
-          <span id="year-month">
-            {{ brief.year }}&nbsp;&dash;&nbsp;{{ brief.month }}
-          </span>
-        </a>
-        <Datepicker
-          v-model="month"
-          monthPicker
-          class="d-inline-block ms-3"
-          style="width: 150px"
-          @update:modelValue="changeMonth"
-        />
+        <div class="d-flex justify-content-start align-items-center">
+          <a
+            href="#"
+            role="button"
+            class="btn bg-primary text-white py-1 px-3 my-2"
+            id="pick-month-btn"
+            style="border-radius: 12px"
+          >
+            <i class="fas fa-calendar-alt me-2"></i>
+            <span id="year-month">
+              {{ brief.year }}&nbsp;&dash;&nbsp;{{ brief.month }}
+            </span>
+          </a>
+          <Datepicker
+            v-model="month"
+            monthPicker
+            class="ms-3"
+            :style="{ width: `150px` }"
+            @update:modelValue="changeMonth"
+          />
+        </div>
 
         <div class="card-body">
           <h3 class="h5">Total Balance</h3>

@@ -5,6 +5,8 @@ import Register from '../components/auth/Register.vue'
 import Signin from '../components/auth/Signin.vue'
 import Categories from '../components/categories/Categories.vue'
 import Statistics from '../components/statistics/Statistics.vue'
+import Icons from '../components/icons/Icons.vue'
+import AddIcon from '../components/icons/AddIcon.vue'
 import BudgetAdd from '../components/budgets/BudgetAdd.vue'
 import CategoryAdd from '../components/categories/CategoryAdd.vue'
 import store from '../store/store'
@@ -18,6 +20,8 @@ const router = createRouter({
     { name: 'profile', path: '/profile', component: Profile, meta: { requiredAuth: true } },
     { name: 'categories', path: '/categories', component: Categories, meta: { requiredAuth: true } },
     { name: 'statistics', path: '/statistics/:year?', component: Statistics, meta: { requiredAuth: true } },
+    { name: 'icons', path: '/icons', component: Icons, meta: { requiredAuth: true } },
+
     { name: 'register', path: '/register', component: Register, meta: { requiredAuth: false } },
     { name: 'signin', path: '/signin', component: Signin, meta: { requiredAuth: false } },
   ]
