@@ -13,17 +13,17 @@
         <div class="card">
           <div class="card-header">
             <h5 class="card-title">
-            Total icons: {{ iconsCount }}
-            <a
-              href="#"
-              role="button"
-              class="float-end ms-4 btn btn-primary rounded"
-              @click.prevent="addIcon"
-            >
-              <i class="fas fa-plus me-1"></i>
-              <span>Add Icon</span>
-            </a>
-          </h5>
+              Total icons: {{ iconsCount }}
+              <a
+                href="#"
+                role="button"
+                class="float-end ms-4 btn btn-primary rounded"
+                @click.prevent="addIcon"
+              >
+                <i class="fas fa-plus me-1"></i>
+                <span>Add Icon</span>
+              </a>
+            </h5>
           </div>
           <div class="card-body d-flex flex-wrap p-2 my-3" v-if="icons.length">
             <span
@@ -142,6 +142,7 @@ export default {
     return {
       modal: null,
       editMode: false,
+      editIconId: null,
       iconClass: "",
       iconColor: "",
     };
@@ -157,6 +158,7 @@ export default {
     },
     editIcon(id, iconClass, iconColor) {
       this.editMode = true;
+      this.editIconId = id;
       this.iconClass = iconClass;
       this.iconColor = iconColor;
       this.modal.show();
@@ -170,15 +172,27 @@ export default {
       const iconColor = this.iconColor;
 
       if (this.editMode) {
+        this.$store
+          .dispatch("updateIcon", { id: this.editIconId, iconClass, iconColor })
+          .then((res) => {
+            this.init();
+          })
+          .catch((err) => console.log(err));
         return;
       }
       this.$store
         .dispatch("storeIcon", { iconClass, iconColor })
         .then((res) => {
-          this.editMode = false;
-          this.modal.hide();
+          this.init();
         })
         .catch((err) => console.log(err));
+    },
+    init() {
+      this.iconClass = "";
+      this.iconColor = "";
+      this.editMode = false;
+      this.editIconId = null;
+      this.modal.hide();
     },
   },
   mounted() {

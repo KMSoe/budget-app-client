@@ -11,6 +11,19 @@ const mutations = {
     },
     'ADD_ICON'(state, data) {
         state.icons.push(data);
+    },
+    'UPDATE_ICON'(state, data) {
+        state.icons = state.icons.map((e) => {
+            if (e.id === data.id) {
+                e.class = data.class;
+                e.color = data.color;
+                e.updated_at = data.updated_at;
+
+                return e;
+            }
+            return e;
+
+        });
     }
 }
 
@@ -55,18 +68,19 @@ const actions = {
                 })
         })
     },
-    updateIcon({ commit }, { iconClass, iconColor }) {
+    updateIcon({ commit }, { id, iconClass, iconColor }) {
         return new Promise((resolve, reject) => {
-            axiosObj.post('/icons', {
+            axiosObj.put(`/icons/${id}`, JSON.stringify({
                 iconClass,
                 iconColor,
-            }, {
+            }), {
                 headers: {
-                    Authorization: `Bearer ${store.getters.token}`
+                    Authorization: `Bearer ${store.getters.token}`,
+                    'Content-type': 'Application/json'
                 },
             })
                 .then(res => {
-                    commit('ADD_ICON', res.data.data);
+                    commit('UPDATE_ICON', res.data.data);
                     resolve(res.data.data);
                 })
                 .catch(err => {

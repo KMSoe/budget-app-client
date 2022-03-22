@@ -4,6 +4,7 @@
       <div class="profile mx-auto text-center d-flex flex-column py-2">
         <img src="/src/assets/kms.jpg" :alt="user.name" class="img-fluid" />
         <h3 class="name mb-1">{{ user.name }}</h3>
+        <span class="email text-muted mb-1">{{ user.userRole }}</span>
         <span class="email text-muted mb-1">{{ user.email }}</span>
         <!-- <a href="#" class="align-self-center btn btn-primary mt-2">Profile</a> -->
       </div>
