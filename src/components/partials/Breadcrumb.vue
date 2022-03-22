@@ -2,7 +2,7 @@
   <section class="breadcrumb-section pt-4">
     <div class="container">
       <div class="row justify-content-center">
-        <div class="col-md-12 col-lg-10">
+        <div class="col-md-12">
           <ol class="breadcrumb px-2 py-3 mx-3 mb-3">
             <li class="breadcrumb-item">
               <router-link :to="{ name: 'home' }"
