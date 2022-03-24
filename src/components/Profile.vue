@@ -44,6 +44,7 @@
 <script>
 import { mapGetters } from "vuex";
 import BudgetTable from "./budgets/BudgetYearlyTable.vue";
+import store from '../store/store';
 
 export default {
   components: {
@@ -61,8 +62,11 @@ export default {
       this.$router.push({ name: "statistics" });
     },
   },
-  created() {
-    this.$store.dispatch("loadProfile");
-  },
+  beforeRouteEnter(to, from, next) {
+    store
+      .dispatch("loadProfile")
+      .then((res) => next())
+      .catch((err) => console.log(err));
+  }
 };
 </script>

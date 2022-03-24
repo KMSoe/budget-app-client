@@ -3,11 +3,15 @@ import store from '../store'
 
 const state = {
     icons: [],
+    uncategorizedIcons: [],
 }
 
 const mutations = {
     'SET_ICONS'(state, data) {
         state.icons = data;
+    },
+    'SET_UNCAT_ICONS'(state, data) {
+        state.uncategorizedIcons = data;
     },
     'ADD_ICON'(state, data) {
         state.icons.push(data);
@@ -37,6 +41,25 @@ const actions = {
             })
                 .then(res => {
                     commit('SET_ICONS', res.data.data);
+                    resolve(res.data.data);
+                })
+                .catch(err => {
+                    if (err.response) {
+                        reject(err);
+                    }
+                })
+        })
+
+    },
+    fetchUnccategorizedIcons({ commit }) {
+        return new Promise((resolve, reject) => {
+            axiosObj.get('/categories/add', {
+                headers: {
+                    Authorization: `Bearer ${store.getters.token}`
+                },
+            })
+                .then(res => {
+                    commit('SET_UNCAT_ICONS', res.data.data);
                     resolve(res.data.data);
                 })
                 .catch(err => {
@@ -98,6 +121,9 @@ const getters = {
     },
     iconsCount(state) {
         return state.icons.length;
+    },
+    uncategorizedIcons(state) {
+        return state.uncategorizedIcons;
     }
 }
 

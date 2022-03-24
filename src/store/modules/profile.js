@@ -13,19 +13,22 @@ const mutations = {
 
 const actions = {
     loadProfile({ commit }) {
-        axiosObj.get('/profile', {
-            headers: {
-                Authorization: `Bearer ${store.getters.token}`
-            }
-        })
-            .then(res => {
-                commit('LOAD_PROFILE_BUDGET_DATA', res.data.data.results);
-            })
-            .catch(err => {
-                if (err.response) {
-                    console.log('err')
+        return new Promise((resolve, reject) => {
+            axiosObj.get('/profile', {
+                headers: {
+                    Authorization: `Bearer ${store.getters.token}`
                 }
             })
+                .then(res => {
+                    commit('LOAD_PROFILE_BUDGET_DATA', res.data.data.results);
+                    resolve(res.data.data.results);
+                })
+                .catch(err => {
+                    if (err.response) {
+                        reject(err);
+                    }
+                })
+        })
     }
 }
 
