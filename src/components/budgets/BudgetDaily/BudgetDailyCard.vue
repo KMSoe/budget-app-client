@@ -31,7 +31,7 @@
           </span>
 
           <div
-            class="ms-2 text-center"
+            class="ms-2 text-center pointer"
             style="width: 42px; height: 42px; line-height: 42px"
           >
             <i
@@ -43,11 +43,7 @@
       </ul>
     </div>
     <div class="card-footer">
-      <p
-        class="mb-0"
-        style="letter-spacing: 1px"
-        v-if="brief.income == 0"
-      >
+      <p class="mb-0" style="letter-spacing: 1px" v-if="brief.income == 0">
         You have No Income in this month.
       </p>
       <p class="mb-0" style="letter-spacing: 1px" v-else>
@@ -57,6 +53,7 @@
   </div>
 </template>
 <script>
+import { useToast } from "vue-toastification";
 import { mapGetters } from "vuex";
 
 export default {
@@ -71,7 +68,10 @@ export default {
   },
   methods: {
     deleteBudget(id) {
-      this.$store.dispatch("deleteBudget", id);
+      this.$store
+        .dispatch("deleteBudget", id)
+        .then((res) => useToast().error("Successfully Deleted"))
+        .catch((err) => useToast().error("Something Went Wrong!!!"));
     },
   },
 };
@@ -89,5 +89,8 @@ i.cat-icon::before {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+.pointer {
+  cursor: pointer;
 }
 </style>

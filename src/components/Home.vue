@@ -17,7 +17,6 @@
                   class="btn btn-secondary me-2 select-btn income-nav"
                   :class="{ active: activeDetail == 'income' }"
                   @click="swapBudgetDetail('income')"
-                  :disabled="activeDetail == 'income'"
                 >
                   <i
                     class="fas fa-check me-2"
@@ -29,7 +28,6 @@
                   class="btn btn-secondary select-btn expense-nav"
                   :class="{ active: activeDetail == 'expense' }"
                   @click="swapBudgetDetail('expense')"
-                  :disabled="activeDetail == 'expense'"
                 >
                   <i
                     class="fas fa-check me-2"
@@ -106,8 +104,6 @@ export default {
     },
   },
   created() {
-    this.$store.dispatch("fetchCategories", "Income");
-    this.$store.dispatch("fetchCategories", "Expense");
     this.$store.dispatch("featchMonthlyBudgets");
   },
 };

@@ -15,19 +15,25 @@
             class="income-nav btn btn-secondary me-2 select-btn"
             role="button"
             :class="{ active: activeCategoryView == 'income' }"
-            :disabled="activeCategoryView == 'income'"
             @click="swapCategoryView('income')"
           >
-            <i class="fas fa-check me-2" v-if="activeCategoryView == 'income'"></i>Income
+            <i
+              class="fas fa-check me-2"
+              v-if="activeCategoryView == 'income'"
+            ></i
+            >Income
           </a>
           <a
             class="expense-nav btn btn-secondary me-2 select-btn"
             role="button"
             :class="{ active: activeCategoryView == 'expense' }"
-            :disabled="activeCategoryView == 'expense'"
             @click="swapCategoryView('expense')"
           >
-            <i class="fas fa-check me-2" v-if="activeCategoryView == 'expense'"></i>Expense
+            <i
+              class="fas fa-check me-2"
+              v-if="activeCategoryView == 'expense'"
+            ></i
+            >Expense
           </a>
         </div>
         <div class="row mt-5">
@@ -65,6 +71,7 @@
 <script>
 import { mapGetters } from "vuex";
 import CategoryList from "./CategoryList.vue";
+import store from "../../store/store";
 
 export default {
   components: {
@@ -88,6 +95,15 @@ export default {
     swapCategoryView(type) {
       this.activeCategoryView = type;
     },
+  },
+  beforeRouteEnter(to, from, next) {
+    store
+      .dispatch("fetchCategories", "Income")
+      .then((res) => {
+        return store.dispatch("fetchCategories", "Expense");
+      })
+      .then((res) => next())
+      .catch((err) => console.log(err));
   },
 };
 </script>

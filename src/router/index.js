@@ -31,7 +31,6 @@ router.beforeEach((to, from, next) => {
     if (to.name !== 'signin' && to.name !== 'register' && !store.getters.authenticated && to.meta.requiredAuth === true) {
       next({ name: 'signin' });
     } else if ((to.name === 'signin' || to.name === 'register') && store.getters.authenticated) {
-      console.log('signin')
       next({ name: from.name });
     }
     else {

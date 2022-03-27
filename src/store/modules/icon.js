@@ -4,6 +4,7 @@ import store from '../store'
 const state = {
     icons: [],
     uncategorizedIcons: [],
+    
 }
 
 const mutations = {
@@ -82,7 +83,7 @@ const actions = {
             })
                 .then(res => {
                     commit('ADD_ICON', res.data.data);
-                    resolve(res.data.data);
+                    resolve(res.data);
                 })
                 .catch(err => {
                     if (err.response) {
@@ -104,7 +105,7 @@ const actions = {
             })
                 .then(res => {
                     commit('UPDATE_ICON', res.data.data);
-                    resolve(res.data.data);
+                    resolve(res.data);
                 })
                 .catch(err => {
                     if (err.response) {

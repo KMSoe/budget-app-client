@@ -31,8 +31,8 @@
             ></i>
           </div>
           <div class="row g-0">
-            <div class="col-3 input-group mb-3">
-              <span class="input-group-text" id="selected-icon">
+            <div class="col-3 input-group align-items-strenghted">
+              <span class="input-group-text me-1" id="selected-icon">
                 <i
                   :class="`cat-icon ${selectedIcon.class}`"
                   :style="{
@@ -40,16 +40,27 @@
                   }"
                 ></i>
               </span>
+              <div class="col-9 form-floating">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="name"
+                  placeholder="Enter Category name"
+                  autocomplete="off"
+                  v-model="v$.name.$model"
+                />
+                <label for="name">Category Name</label>
+              </div>
             </div>
-            <div class="col-9 form-floating mb-3">
-              <input
-                type="text"
-                class="form-control mb-1"
-                id="name"
-                placeholder="Enter Category name"
-                autocomplete="off"
-              />
-              <label for="name">Category Name</label>
+          </div>
+          <div class="row g-0 mb-3">
+            <div class="col-2"></div>
+            <div class="col-9">
+              <template v-if="v$.name.$dirty">
+                <small class="form-text error" v-if="v$.name.required.$invalid"
+                  >Category Name is required</small
+                >
+              </template>
             </div>
           </div>
           <div class="row g-0">
@@ -58,6 +69,8 @@
               <button
                 class="btn text-white ms-2"
                 :class="[type == 'Income' ? 'bg-plus' : 'bg-minus']"
+                @click.prevent="addCategory"
+                :disabled="v$.$invalid"
               >
                 Add
               </button>
@@ -72,11 +85,25 @@
 <script>
 import store from "../../store/store";
 import { mapGetters } from "vuex";
+import useVuelidate from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
+import { useToast } from "vue-toastification";
 
 export default {
+  setup() {
+    return {
+      v$: useVuelidate(),
+    };
+  },
   data() {
     return {
       selectedIcon: {},
+      name: "",
+    };
+  },
+  validations() {
+    return {
+      name: { required },
     };
   },
   computed: {
@@ -88,15 +115,37 @@ export default {
   },
   methods: {
     selectIcon(icon) {
-      console.log(icon);
       this.selectedIcon = icon;
+    },
+    addCategory() {
+      this.$store
+        .dispatch("storeCategory", {
+          icon_id: this.selectedIcon.id,
+          type: this.type,
+          name: this.name,
+        })
+        .then((res) => {
+          this.$router.push({ name: "categories" });
+          useToast().success("Category Added Successfully");
+          this.name = "";
+        })
+        .catch((err) => useToast().error('Error'));
     },
   },
   beforeRouteEnter(to, from, next) {
     store
       .dispatch("fetchUnccategorizedIcons")
-      .then((res) => next(vm => vm.selectIcon(res[0]) ))
-      .catch((err) => console.log(err));
+      .then((res) => {
+        const type = to.params.type;
+        if (type == "income" || type == "expense") {
+          next((vm) => vm.selectIcon(res[0]));
+        } else {
+          router.push({ name: from.name });
+          useToast().error("Invalid URL");
+        }
+        
+      })
+      .catch((err) => useToast().error('Error'));
   },
 };
 </script>

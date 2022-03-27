@@ -4,13 +4,13 @@
       <div class="row justify-content-center">
         <div class="col-lg-6">
           <div class="auth-form-card">
-            <h3 class="text-center mt-5 mb-1">Welcome Back</h3>
+            <h3 class="text-center mt-5 mb-3">Welcome Back</h3>
             <div
               class="alert alert-danger"
-              v-for="(value, key) in errors"
-              :key="key"
+              v-for="(err, index) in errors"
+              :key="index"
             >
-              {{ value[0] }}
+              {{ err }}
             </div>
             <form class="mt-5" @submit.prevent="onSubmit">
               <div
@@ -99,6 +99,8 @@
 import useVuelidate from "@vuelidate/core";
 import { required, email } from "@vuelidate/validators";
 import { mapGetters } from "vuex";
+import store from "../../store/store";
+import { useToast } from 'vue-toastification';
 
 export default {
   setup() {
@@ -110,10 +112,11 @@ export default {
     return {
       email: "",
       password: "",
+      errors: null,
     };
   },
   computed: {
-    ...mapGetters(["errors"]),
+
   },
   validations() {
     return {
@@ -127,8 +130,23 @@ export default {
         email: this.email,
         password: this.password,
       };
-      this.$store.dispatch("signin", authData);
+      this.$store
+        .dispatch("signin", authData)
+        .then((data) => {
+          this.$router.push({ name: "home" });
+          useToast().success('Login Successfully');
+        })
+        .catch((err) => {
+          this.errors = this.$store.getters.signinErrors;
+          useToast().error('Something Went Wrong!!!');
+          this.password = '';
+        });
     },
+  },
+  beforeRouteEnter(to, from, next) {
+    if (!store.getters.authenticated) {
+      next();
+    }
   },
 };
 </script>

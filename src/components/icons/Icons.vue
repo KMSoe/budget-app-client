@@ -125,6 +125,7 @@ import store from "../../store/store";
 import { Modal } from "bootstrap";
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
+import { useToast } from "vue-toastification";
 
 export default {
   setup() {
@@ -152,8 +153,10 @@ export default {
   },
   methods: {
     addIcon() {
+      this.iconClass = "";
+      this.iconColor = "";
       this.editMode = false;
-      this.showModal = true;
+      this.editIconId = null;
       this.modal.show();
     },
     editIcon(id, iconClass, iconColor) {
@@ -164,8 +167,7 @@ export default {
       this.modal.show();
     },
     hideModal() {
-      this.editMode = false;
-      this.modal.hide();
+      this.init();
     },
     submitForm() {
       const iconClass = this.iconClass;
@@ -174,16 +176,18 @@ export default {
       if (this.editMode) {
         this.$store
           .dispatch("updateIcon", { id: this.editIconId, iconClass, iconColor })
-          .then((res) => {
+          .then((data) => {
             this.init();
+            useToast().info(data.message);
           })
           .catch((err) => console.log(err));
         return;
       }
       this.$store
         .dispatch("storeIcon", { iconClass, iconColor })
-        .then((res) => {
+        .then((data) => {
           this.init();
+          useToast().info(data.message);
         })
         .catch((err) => console.log(err));
     },

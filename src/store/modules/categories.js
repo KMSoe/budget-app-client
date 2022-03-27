@@ -17,26 +17,53 @@ const mutations = {
 
 const actions = {
     fetchCategories({ commit }, type) {
-        axiosObj.get('/categories', {
-            headers: {
-                Authorization: `Bearer ${store.getters.token}`
-            },
-            params: {
-                type: type.toLowerCase()
-            }
+        return new Promise((resolve, reject) => {
+            axiosObj.get('/categories', {
+                headers: {
+                    Authorization: `Bearer ${store.getters.token}`
+                },
+                params: {
+                    type: type.toLowerCase()
+                }
+            })
+                .then(res => {
+                    if (res.data.type == 'Income') {
+                        commit('SET_INCOME_CATEGORIES', res.data.data.categories);
+                    } else {
+                        commit('SET_EXPENSE_CATEGORIES', res.data.data.categories);
+                    }
+                    resolve(res.data.data.categories);
+                })
+                .catch(err => {
+                    if (err.response) {
+                        reject(err);
+                    }
+                })
         })
-            .then(res => {
-                if (res.data.type == 'Income') {
-                    commit('SET_INCOME_CATEGORIES', res.data.data.categories);
-                } else {
-                    commit('SET_EXPENSE_CATEGORIES', res.data.data.categories);
+
+    },
+    storeCategory({ commit }, { icon_id, type, name }) {
+        return new Promise((resolve, reject) => {
+            axiosObj.post('/categories', { icon_id, type, name }, {
+                headers: {
+                    Authorization: `Bearer ${store.getters.token}`
                 }
             })
-            .catch(err => {
-                if (err.response) {
-                    console.log('err')
-                }
-            })
+                .then(res => {
+                    if (res.data.type == 'Income') {
+
+                    } else {
+
+                    }
+                    resolve(res.data);
+                })
+                .catch(err => {
+                    if (err.response) {
+                        reject(err);
+                    }
+                })
+        })
+
     },
 }
 

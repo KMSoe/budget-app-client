@@ -7,10 +7,10 @@
             <h1 class="text-center my-3">Welcome to Budget</h1>
             <div
               class="alert alert-danger"
-              v-for="(value, key) in errors"
-              :key="key"
+              v-for="(err, index) in errors"
+              :key="index"
             >
-              {{ value[0] }}
+              {{ err }}
             </div>
             <form
               class="mt-5"
@@ -209,6 +209,8 @@
 import useVuelidate from "@vuelidate/core";
 import { required, email, minLength, sameAs } from "@vuelidate/validators";
 import { mapGetters } from "vuex";
+import store from "../../store/store";
+import { useToast } from "vue-toastification";
 
 export default {
   setup() {
@@ -224,10 +226,8 @@ export default {
       confirmPassword: "",
       gender: "",
       image: "",
+      errors: null,
     };
-  },
-  computed: {
-    ...mapGetters(["errors"]),
   },
   validations() {
     return {
@@ -246,8 +246,22 @@ export default {
         gender: this.gender,
         image: this.image,
       };
-      this.$store.dispatch("signup", authData);
+      this.$store
+        .dispatch("signup", authData)
+        .then((data) => {
+          this.$router.push({ name: "home" });
+          useToast().success("Registeration is Successfully");
+        })
+        .catch((err) => {
+          this.errors = this.$store.getters.signupErrors;
+          useToast().error("Something Went Wrong!!!");
+        });
     },
+  },
+  beforeRouteEnter(to, from, next) {
+    if (!store.getters.authenticated) {
+      next();
+    }
   },
 };
 </script>

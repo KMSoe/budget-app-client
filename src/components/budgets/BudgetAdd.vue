@@ -122,6 +122,8 @@ import { ref } from "vue";
 import useVuelidate from "@vuelidate/core";
 import { minValue, required } from "@vuelidate/validators";
 import { useStore } from "vuex";
+import router from "../../router";
+import { useToast } from "vue-toastification";
 
 export default {
   setup() {
@@ -135,6 +137,7 @@ export default {
     return {
       remark: "",
       amount: "",
+      categories: null,
     };
   },
   validations() {
@@ -147,15 +150,11 @@ export default {
       const type = this.$route.params.type;
       return `${type.charAt(0).toUpperCase()}${type.slice(1)}`;
     },
-    categories() {
-      if (this.type == "Income") {
-        return this.$store.getters.incomeCategories;
-      } else {
-        return this.$store.getters.expenseCategories;
-      }
-    },
   },
   methods: {
+    setCategories(categories) {
+      this.categories = categories;
+    },
     onSubmit() {
       const formData = {
         date: this.date,
@@ -164,8 +163,30 @@ export default {
         remark: this.remark,
         amount: this.amount,
       };
-      this.$store.dispatch("storeBudget", formData);
+      this.$store
+        .dispatch("storeBudget", formData)
+        .then((data) => {
+          this.$router.push({ name: "home" });
+          useToast().success("Successfully added");
+        })
+        .catch((err) => useToast().error("Something Went Wrong!!!"));
     },
+  },
+  created() {
+    const type = this.$route.params.type;
+    this.$store
+      .dispatch("fetchCategories", type)
+      .then((data) => this.setCategories(data))
+      .catch((err) => console.log(err));
+  },
+  beforeRouteEnter(to, from, next) {
+    const type = to.params.type;
+    if (type == "income" || type == "expense") {
+      next();
+    } else {
+      router.push({ name: from.name });
+      useToast().error("Invalid URL");
+    }
   },
 };
 </script>

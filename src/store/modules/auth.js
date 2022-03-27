@@ -6,7 +6,10 @@ const state = {
     userId: null,
     user: {},
     authenticated: false,
-    authErrors: null,
+    authErrors: {
+        signin: [],
+        signup: [],
+    },
 }
 
 const mutations = {
@@ -27,8 +30,12 @@ const mutations = {
         state.authenticated = false;
         router.replace({ name: 'signin' });
     },
-    'SET_ERROR'(state, errors) {
-        state.authErrors = errors;
+    'SET_ERROR'(state, { target, errors }) {
+        state.authErrors[target] = [];
+
+        for (const key in errors) {
+            state.authErrors[target].push(errors[key][0]);
+        }
     }
 }
 
@@ -39,58 +46,64 @@ const actions = {
         }, tokenLife);
     },
     signup({ commit, dispatch }, authData) {
-        axiosObj.post('/register', {
-            name: authData.name,
-            email: authData.email,
-            password: authData.password,
-            gender: authData.gender,
-        })
-            .then(res => {
-                if (res.status === 201) {
-                    const tokenLife = res.data.data.life ? res.data.data.life : 1000 * 60 * 60 * 24 * 15;
-                    const expirationDate = new Date(new Date().getTime() + tokenLife);
-                    localStorage.setItem('token', res.data.data.token);
-                    localStorage.setItem('userId', res.data.id);
-                    localStorage.setItem('expirationDate', expirationDate);
-                    commit('AUTH_USER', { id: res.data.id, token: res.data.data.token });
-                    commit('SET_USER', res.data.data.user);
-                    commit('SET_AUTH', true);
-                    router.push({ name: 'home' });
-
-                    dispatch('setLogoutTimer', tokenLife);
-                }
+        return new Promise((resolve, reject) => {
+            axiosObj.post('/register', {
+                name: authData.name,
+                email: authData.email,
+                password: authData.password,
+                gender: authData.gender,
             })
-            .catch(err => {
-                if (err.response.status === 400) {
-                    commit('SET_ERROR', err.response.data.errors);
-                }
-            })
+                .then(res => {
+                    if (res.status === 201) {
+                        const tokenLife = res.data.data.life ? res.data.data.life : 1000 * 60 * 60 * 24 * 15;
+                        const expirationDate = new Date(new Date().getTime() + tokenLife);
+                        localStorage.setItem('token', res.data.data.token);
+                        localStorage.setItem('userId', res.data.id);
+                        localStorage.setItem('expirationDate', expirationDate);
+                        commit('AUTH_USER', { id: res.data.id, token: res.data.data.token });
+                        commit('SET_USER', res.data.data.user);
+                        commit('SET_AUTH', true);
+                        dispatch('setLogoutTimer', tokenLife);
+                        resolve(res.data);
+                    }
+                })
+                .catch(err => {
+                    if (err.response) {
+                        commit('SET_ERROR', { target: 'signup', errors: err.response.data.errors });
+                        reject(err.response.data.errors);
+                    }
+                })
+        });
     },
     signin({ commit, dispatch }, authData) {
-        axiosObj.post('/login', {
-            email: authData.email,
-            password: authData.password,
-        })
-            .then(res => {
-                if (res.status === 200) {
-                    const tokenLife = res.data.data.life ? res.data.data.life : 1000 * 60 * 60 * 24 * 15;
-                    const expirationDate = new Date(new Date().getTime() + tokenLife);
-                    localStorage.setItem('token', res.data.data.token);
-                    localStorage.setItem('userId', res.data.id);
-                    localStorage.setItem('expirationDate', expirationDate);
-                    commit('AUTH_USER', { id: res.data.id, token: res.data.data.token });
-                    commit('SET_USER', res.data.data.user);
-                    commit('SET_AUTH', true);
-                    router.push({ name: 'home' });
+        return new Promise((resolve, reject) => {
+            axiosObj.post('/login', {
+                email: authData.email,
+                password: authData.password,
+            })
+                .then(res => {
+                    if (res.status === 200) {
+                        const tokenLife = res.data.data.life ? res.data.data.life : 1000 * 60 * 60 * 24 * 15;
+                        const expirationDate = new Date(new Date().getTime() + tokenLife);
+                        localStorage.setItem('token', res.data.data.token);
+                        localStorage.setItem('userId', res.data.id);
+                        localStorage.setItem('expirationDate', expirationDate);
+                        commit('AUTH_USER', { id: res.data.id, token: res.data.data.token });
+                        commit('SET_USER', res.data.data.user);
+                        commit('SET_AUTH', true);
 
-                    dispatch('setLogoutTimer', tokenLife);
-                }
-            })
-            .catch(err => {
-                if (err.response.status === 400) {
-                    commit('SET_ERROR', err.response.data.errors);
-                }
-            })
+                        dispatch('setLogoutTimer', tokenLife);
+                        resolve(res.data);
+                    }
+                })
+                .catch(err => {
+                    if (err.response) {
+                        commit('SET_ERROR', { target: 'signin', errors: err.response.data.errors });
+                        reject(err.response.data.errors);
+                    }
+                })
+        });
+
     },
     tryAutoLogin({ commit, dispatch }) {
         const token = localStorage.getItem('token');
@@ -118,7 +131,6 @@ const actions = {
                     commit('AUTH_USER', { id: user.id, token });
                     commit('SET_USER', user);
                     commit('SET_AUTH', true);
-                    // router.push({name: 'home'});
                 }
             })
             .catch(err => {
@@ -134,8 +146,6 @@ const actions = {
     },
     logout({ commit }) {
         axiosObj.post('/logout', {
-
-        }, {
             headers: {
                 Authorization: `Bearer ${state.token}`
             }
@@ -156,12 +166,6 @@ const actions = {
             })
 
     },
-    storeUser({ commit, state }, userData) {
-
-    },
-    fetchUser({ commit, state }) {
-
-    }
 }
 
 const getters = {
@@ -177,8 +181,11 @@ const getters = {
     token(state) {
         return state.token;
     },
-    errors(state) {
-        return state.authErrors;
+    signinErrors(state) {
+        return state.authErrors.signin;
+    },
+    signupErrors(state) {
+        return state.authErrors.signup;
     }
 }
 

@@ -16,9 +16,7 @@
             <sidebar sidebar-type="desktop-sidebar" :is-plus="isPlus">
             </sidebar>
           </div>
-          <div
-            class="col-lg-9 mx-auto"
-          >
+          <div :class="[authenticated ? 'col-lg-9 mx-auto page-view' : 'col-12 mx-auto page-view']">
             <router-view v-slot="{ Component }">
               <transition name="slide" mode="out-in">
                 <component :is="Component" />
@@ -59,8 +57,6 @@ export default {
     this.$store.dispatch("tryAutoLogin");
     setTimeout(() => {
       if (this.authenticated) {
-        this.$store.dispatch("fetchCategories", "Income");
-        this.$store.dispatch("fetchCategories", "Expense");
         this.$store.dispatch("featchMonthlyBudgets");
       }
     }, 1000);
@@ -119,7 +115,7 @@ a:hover {
   color: var(--minus-color) !important;
 }
 .site-section {
-  padding-top: 80px;
+  margin-top: 70px;
 }
 .slide-enter-active {
   animation: slide-in 200ms ease-out forwards;
@@ -149,6 +145,16 @@ a:hover {
     transform: translateY(-30px);
     opacity: 0;
   }
+}
+.page-view {
+  height: 92vh;
+  margin-trim: 0;
+  display: flex;
+  flex-direction: column;
+}
+footer {
+  min-height: 50px;
+  margin-top: auto;
 }
 </style>
 

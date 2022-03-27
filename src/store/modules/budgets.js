@@ -117,48 +117,52 @@ const actions = {
             })
     },
     storeBudget({ commit }, data) {
-        axiosObj.post('/budgets', {
-
-            date: data.date,
-            type: data.type,
-            category_id: data.category_id,
-            remark: data.remark,
-            amount: data.amount,
-        }, {
-            headers: {
-                Authorization: `Bearer ${store.getters.token}`
-            },
-        })
-            .then(res => {
-                if (res.status === 201) {
-                    router.push({ name: 'home' });
-                }
+        return new Promise((resolve, reject) => {
+            axiosObj.post('/budgets', {
+                date: data.date,
+                type: data.type,
+                category_id: data.category_id,
+                remark: data.remark,
+                amount: data.amount,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${store.getters.token}`
+                },
             })
-            .catch(err => {
-                if (err.response) {
-                    console.log('err')
-                }
-            })
+                .then(res => {
+                    if (res.status === 201) {
+                        resolve(res.data);
+                    }
+                })
+                .catch(err => {
+                    if (err.response) {
+                        reject(err);
+                    }
+                })
+        });
     },
     deleteBudget({ commit, dispatch }, id) {
-        axiosObj.delete(`/budgets/${id}`, {
-            headers: {
-                Authorization: `Bearer ${store.getters.token}`
-            },
+        return new Promise((resolve, reject) => {
+            axiosObj.delete(`/budgets/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${store.getters.token}`
+                },
+            })
+                .then(res => {
+                    if (res.status === 204) {
+                        const d = state.selectedTime;
+                        const month = d.getMonth() + 1;
+                        const year = d.getFullYear();
+                        dispatch('featchMonthlyBudgets', { month, year });
+                        resolve(res);
+                    }
+                })
+                .catch(err => {
+                    if (err.response) {
+                        reject(err);
+                    }
+                })
         })
-            .then(res => {
-                if (res.status === 204) {
-                    const d = state.selectedTime;
-                    const month = d.getMonth() + 1;
-                    const year = d.getFullYear();
-                    dispatch('featchMonthlyBudgets', { month, year });
-                }
-            })
-            .catch(err => {
-                if (err.response) {
-                    console.log('err')
-                }
-            })
     }
 }
 

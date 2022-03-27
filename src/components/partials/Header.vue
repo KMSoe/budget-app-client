@@ -3,7 +3,7 @@
     <div class="container-fluid">
       <nav
         class="main-nav d-flex pe-2"
-        :class="[isPlus ? 'bg-plus' : 'bg-minus']"
+        :class="[isPlus ? 'bg-plus' : 'bg-minus', authenticated ? '' : 'py-2']"
       >
         <div class="ms-2">
           <a
